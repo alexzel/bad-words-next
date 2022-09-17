@@ -133,7 +133,7 @@ class BadWordsNext {
     if (str === '' || this.check(str) === false) return str
     return str.split(/[\b\s]/).map(
       p => this.check(p) === true ? this.opts.placeholder : p
-    ).join(' ')
+    ).join(' ') // TODO: this one is most likely incorrect as it assumes spaces when joining
   }
 }
 
