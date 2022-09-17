@@ -131,9 +131,18 @@ class BadWordsNext {
 
   filter (str: string): string {
     if (str === '' || this.check(str) === false) return str
+
+    const delims: string[] = []
+    const re = /([\b\s])/g
+
+    let match
+    while ((match = re.exec(str)) !== null) {
+      delims.push(match[0])
+    }
+
     return str.split(/[\b\s]/).map(
       p => this.check(p) === true ? this.opts.placeholder : p
-    ).join(' ') // TODO: this one is most likely incorrect as it assumes spaces when joining
+    ).reduce((a, s, i) => (a + (i > 0 ? delims[i - 1] : '') + s), '')
   }
 }
 

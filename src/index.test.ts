@@ -36,6 +36,11 @@ describe('index', () => {
     })
 
     describe('filter()', () => {
+      it('preserves word boundaries', () => {
+        const badwords = new BadWordsNext({ data: en })
+        expect(badwords.filter('just\t $hittt \n   and \ng0 \n@$hol ')).toBe('just\t *** \n   and \ng0 \n*** ')
+      })
+
       it('filters with custom placeholder', () => {
         const badwords = new BadWordsNext({ data: en, placeholder: '#' })
         expect(badwords.filter('sex')).toBe('#')
