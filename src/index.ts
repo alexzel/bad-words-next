@@ -142,7 +142,7 @@ class BadWordsNext {
 
     return str.split(/[\b\s]/).map(
       p => this.check(p) === true ? this.opts.placeholder : p
-    ).reduce((a, s, i) => (a + (i > 0 ? delims[i - 1] : '') + s), '')
+    ).reduce((a, s, i) => (a + (i > 0 ? delims[i - 1] === undefined ? ' ' : delims[i - 1] : '') + s), '')
   }
 }
 
