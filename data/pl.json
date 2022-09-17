@@ -1,0 +1,41 @@
+{
+  "id": "pl",
+  "words": [
+    "chuj",
+    "chujnia",
+    "debil*",
+    "dupa",
+    "dziwka",
+    "gówno",
+    "jebany",
+    "jebać",
+    "kurwa",
+    "kurwy",
+    "pieprzyć",
+    "pierdolec",
+    "pierdolić",
+    "pierdolnięty",
+    "pierdolnąć",
+    "pierdoła",
+    "pierdzieć",
+    "pojebany",
+    "popierdolony",
+    "skurwysyn",
+    "sraczka",
+    "srać",
+    "zajebisty"
+  ],
+  "lookalike": {
+    "$": "s",
+    "@": "a",
+    "<": "c",
+    "!": "i",
+    "+": "t",
+    "0": "o",
+    "1": "i",
+    "2": "z",
+    "3": "z",
+    "5": "s",
+    "8": "b"
+  }
+}

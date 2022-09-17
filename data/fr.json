@@ -1,0 +1,37 @@
+{
+  "id": "fr",
+  "words": [
+    "bordel",
+    "branler",
+    "branlette",
+    "branleur",
+    "branleuse",
+    "caca",
+    "connard",
+    "connasse",
+    "couilles",
+    "encule*",
+    "enculé*",
+    "enfoiré*",
+    "fille_de_pute",
+    "merde",
+    "nègre",
+    "salaud",
+    "salope",
+    "tapette",
+    "étron"
+  ],
+  "lookalike": {
+    "$": "s",
+    "@": "a",
+    "<": "c",
+    "!": "i",
+    "+": "t",
+    "0": "o",
+    "1": "i",
+    "2": "z",
+    "3": "z",
+    "5": "s",
+    "8": "b"
+  }
+}

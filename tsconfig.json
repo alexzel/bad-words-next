@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "module": "esNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "target": "es2018"
+  },
+  "include": ["src/"]
+}
