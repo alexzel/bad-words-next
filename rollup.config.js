@@ -1,3 +1,4 @@
+import { nodeResolve } from '@rollup/plugin-node-resolve'
 import babel from '@rollup/plugin-babel'
 import del from 'rollup-plugin-delete'
 import dts from 'rollup-plugin-dts'
@@ -20,6 +21,7 @@ export default [
       }
     ],
     plugins: [
+      nodeResolve(),
       del({ targets: 'lib/*' }),
       babel({
         babelHelpers: 'bundled',
