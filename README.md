@@ -2,7 +2,9 @@
 
 Profanity filtering and detection.
 
-Started as a quick overnight project. Feel free to contribute.
+Quick overnight project. Filtering is not production ready yet.
+
+**Use at your own risk. Filtering may remove new lines and words bounderies.**
 
 ## Install
 
