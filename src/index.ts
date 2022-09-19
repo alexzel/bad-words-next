@@ -57,21 +57,21 @@ export interface Options {
 
   /**
    * Filter placeholder
-   * @defaultValue '***'
+   * @defaultValue <code>'***'</code>
    * @type {[type]}
    */
   placeholder?: string
 
   /**
    * Special chars to allow on start and end of a word
-   * @defaultValue <code>/\d|[!@#$%^&*()[\];:'",.?\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/</code>
+   * @defaultValue <code>/\d|[!@#$%^&*()[\\];:'",.?\\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/</code>
    * @type {[type]}
    */
   specialChars?: RegExp
 
   /**
    * Pseudo space chars, a list of values for `_` symbol replacement in a dictionary word string
-   * @defaultValue ['', '.', '-', '_', ';', '|']
+   * @defaultValue <code>['', '.', '-', '_', ';', '|']</code>
    */
   spaceChars?: string[]
 
