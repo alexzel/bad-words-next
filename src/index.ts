@@ -64,7 +64,7 @@ export interface Options {
 
   /**
    * Special chars to allow on start and end of a word
-   * @defaultValue /\d|[!@#$%^&*()[\];:'",.?\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/
+   * @defaultValue <code>/\d|[!@#$%^&*()[\];:'",.?\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/</code>
    * @type {[type]}
    */
   specialChars?: RegExp
