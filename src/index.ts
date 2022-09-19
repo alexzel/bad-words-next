@@ -77,7 +77,7 @@ export interface Options {
 
   /**
    *  List of dictionary ids to apply transformations from [confusables](https://github.com/gc/confusables) npm package
-   *  @defaultValue ['en', 'es', 'de']
+   *  @defaultValue <code>['en', 'es', 'de']</code>
    */
   confusables?: string[]
 }
