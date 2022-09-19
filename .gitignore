@@ -17,6 +17,6 @@ build
 dist
 lib
 tmp
-docs
+doc
 
 .env

@@ -26,10 +26,9 @@
     "test": "jest",
     "pretest": "yarn lint && tsc --noEmit",
     "lint": "eslint ./src",
-    "docs": "typedoc --options typedoc.json",
-    "jsdoc": "jsdoc -c jsdoc.json",
+    "doc": "typedoc --options typedoc.json",
     "release": "yarn version",
-    "preversion": "yarn install && yarn build && yarn test",
+    "preversion": "yarn install && yarn build && yarn test && yarn doc",
     "postversion": "git push --tags && yarn publish . --new-version $npm_package_version && git push && echo Successfully released version $npm_package_version!",
     "cleanup": "git tag -d $(git tag) && git fetch --all --tags && git clean --force -d -x && git reset --hard origin/main && git checkout main"
   },
@@ -38,7 +37,8 @@
   "types": "lib/index.d.ts",
   "files": [
     "lib",
-    "data"
+    "data",
+    "doc"
   ],
   "devDependencies": {
     "@babel/core": "^7.19.1",
