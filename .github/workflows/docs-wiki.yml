@@ -1,0 +1,51 @@
+name: Docs Wiki
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          path: bad-words-next
+
+      - name: Install and build
+        run: |
+          cd $GITHUB_WORKSPACE/bad-words-next
+          yarn install --frozen-lockfile
+          yarn docs
+
+      - name: Checkout wiki
+        uses: actions/checkout@v3
+        with:
+          repository: "alexzel/bad-words-next.wiki"
+          path: bad-words-next.wiki
+
+      - name: Copy files
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "Wiki mirror"
+
+          cp $GITHUB_WORKSPACE/bad-words-next/docs/*.md $GITHUB_WORKSPACE/bad-words-next.wiki
+          cd $GITHUB_WORKSPACE/bad-words-next.wiki
+          
+          git add .
+
+          git diff-index --quiet HEAD -- || git commit -m "Update wiki pages"
+          git push

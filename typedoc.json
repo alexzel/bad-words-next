@@ -1,0 +1,15 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "tsconfig": "./tsconfig.json",
+  "entryPoints": "./src/index.ts",
+  "entryPointStrategy": "expand",
+  "out": "docs",
+  "theme": "github-wiki",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeExternals": true,
+  "excludeNotDocumented": true,
+  "hideGenerator": true,
+  "readme": "none"
+}

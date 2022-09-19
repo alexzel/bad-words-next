@@ -1,33 +1,90 @@
 /**
- * @license bad-words-next
- * Copyright (c) 2022, Alex Zelensky. (MIT License)
- * https://github.com/alexzel/bad-words-next
+ * bad-words-next
+ *
+ * @author Alex Zelensky
+ * @copyright Copyright (c) 2022, Alex Zelensky. (MIT License)
+ * @license MIT
  */
 
 import { remove } from 'confusables'
 
-interface Lookalike {
+/**
+ * Simple key-value object for homoglyphs conversion
+ */
+export interface Lookalike {
   [key: string | number]: string
 }
 
-interface Data {
+/**
+ * Dictionary data format
+ */
+export interface Data {
+  /**
+   * Unique dictionary ID
+   * @type {string}
+   */
   id: string
+
+  /**
+   * Words list
+   * @type {string[]}
+   */
   words: string[]
+
+  /**
+   * Lookalike homoglyphs map
+   * @type {Lookalike}
+   */
   lookalike: Lookalike
 }
 
+/**
+ * Dictionaries data map
+ */
 interface DataMap {
   [key: string]: Data
 }
 
-interface Options {
+/**
+ * Constructor options
+ */
+export interface Options {
+  /**
+   * Dictionary data
+   * @type {[type]}
+   */
   data?: Data
+
+  /**
+   * Filter placeholder
+   * @defaultValue '***'
+   * @type {[type]}
+   */
   placeholder?: string
+
+  /**
+   * Special chars to allow on start and end of a word
+   * @defaultValue /\d|[!@#$%^&*()[\];:'",.?\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/
+   * @type {[type]}
+   */
   specialChars?: RegExp
+
+  /**
+   * Pseudo space chars, a list of values for `_` symbol replacement in a dictionary word string
+   * @defaultValue ['', '.', '-', '_', ';', '|']
+   */
   spaceChars?: string[]
+
+  /**
+   *  List of dictionary ids to apply transformations from [confusables](https://github.com/gc/confusables) npm package
+   *  @defaultValue ['en', 'es', 'de']
+   */
   confusables?: string[]
 }
 
+/**
+ * Required constructor options for internal store
+ */
 interface RequiredOptions {
   data: Data
   placeholder: string
@@ -36,12 +93,18 @@ interface RequiredOptions {
   confusables: string[]
 }
 
+/**
+ * Internal word representation
+ */
 interface Word {
   id: string
   expr: string
 }
 
-// TODO: implement excludes?
+/**
+ * Default options object to use in BadWordsNext class contructor
+ * @type {Object}
+ */
 const DEFAULT_OPTIONS = {
   data: {
     id: 'default',
@@ -54,13 +117,43 @@ const DEFAULT_OPTIONS = {
   confusables: ['en', 'es', 'de']
 }
 
+/**
+ * Main library class implementing profanity filtering and detection
+ */
 class BadWordsNext {
+  /**
+   * Options object built from options passed into constructor and default options object
+   * @private
+   * @type {RequiredOptions}
+   */
   opts: RequiredOptions
+
+  /**
+   * Special chars represented as string from specialChars regular expression
+   * @private
+   * @type {string}
+   */
   specialChars: string
 
+  /**
+   * Words list arrived from dictionaries data
+   * @private
+   * @type {Word[]}
+   */
   words: Word[]
+
+  /**
+   * Dictionaries data map with data ID as a key
+   * @private
+   * @type {DataMap}
+   */
   data: DataMap
 
+  /**
+   * Create an instance of BadWordsNext class
+   *
+   * @param {Options}
+   */
   constructor (opts?: Options) {
     this.opts = opts !== undefined
       ? { ...DEFAULT_OPTIONS, ...opts }
@@ -74,6 +167,11 @@ class BadWordsNext {
     this.add(this.opts.data)
   }
 
+  /**
+   * Add dictionary data for bad words filtering and detection
+   *
+   * @param {Data} data Dictionary data
+   */
   add (data: Data): void {
     this.data[data.id] = data
 
@@ -104,6 +202,14 @@ class BadWordsNext {
     }
   }
 
+  /**
+   * Prepare a string by replacing dictionary lookalikes and homoglyphs
+   *
+   * @private
+   * @param  {string} str input string
+   * @param  {string} id dictionary ID
+   * @return {string}
+   */
   prepare (str: string, id: string): string {
     const s = str.split('').map(
       ch => this.data[id].lookalike[ch] === undefined
@@ -114,12 +220,25 @@ class BadWordsNext {
     return this.opts.confusables.includes(id) ? remove(s) : s
   }
 
+  /**
+   * Create regular expression by dictionary word expression string
+   *
+   * @private
+   * @param  {string}
+   * @return {RegExp}
+   */
   regexp (expr: string): RegExp {
     return new RegExp(
       `(?:^|\\b|\\s)(?:${this.specialChars})*${expr}(?:${this.specialChars})*(?:$|\\b|\\s)`, 'i'
     )
   }
 
+  /**
+   * Check whether the input string contains bad words or not
+   *
+   * @param  {string}
+   * @return {Boolean}
+   */
   check (str: string): Boolean {
     for (const word of this.words) {
       if (this.regexp(word.expr).test(str) || this.regexp(word.expr).test(this.prepare(str, word.id))) {
@@ -129,6 +248,12 @@ class BadWordsNext {
     return false
   }
 
+  /**
+   * Filter bad words in the input string and replace them with a placeholder
+   *
+   * @param  {string}
+   * @return {string}
+   */
   filter (str: string): string {
     if (str === '' || this.check(str) === false) return str
 
