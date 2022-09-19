@@ -85,6 +85,7 @@ interface Options {
   specialChars?: RegExp // Special chars to allow on word start and word end - default value /\d|[!@#$%^&*()[\];:'",.?\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/
   spaceChars?: string[] // Pseudo space chars, a list of values for `_` symbol in a dictionary word string - default value ['', '.', '-', '_', ';', '|']
   confusables?: string[] // List of ids to apply transformations from `confusables` npm package - default ['en', 'es', 'de']
+  maxCacheSize?: number // Max items to store in cache - default value 100
 }
 ```
 

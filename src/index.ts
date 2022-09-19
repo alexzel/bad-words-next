@@ -83,7 +83,7 @@ export interface Options {
   confusables?: string[]
 
   /**
-   * Max cache items to store
+   * Max items to store in cache
    * @defaultValue 100
    * @type {[type]}
    */
