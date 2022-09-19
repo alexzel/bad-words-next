@@ -4,7 +4,7 @@ Profanity filtering and detection.
 
 Quick overnight project. Feel free to contribute.
 
-See API documentation in [GitHub Wiki](https://github.com/alexzel/bad-words-next/wiki/BadWordsNext)
+API documentation in [GitHub Wiki](https://github.com/alexzel/bad-words-next/wiki/BadWordsNext).
 
 ## Install
 
