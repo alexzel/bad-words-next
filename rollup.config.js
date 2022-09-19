@@ -20,6 +20,10 @@ export default [
         exports: 'auto'
       }
     ],
+    external: [
+      'memoizee',
+      'confusables'
+    ],
     plugins: [
       nodeResolve(),
       del({ targets: 'lib/*' }),

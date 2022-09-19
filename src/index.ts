@@ -7,6 +7,7 @@
  */
 
 import { remove } from 'confusables'
+import memoize from 'memoizee'
 
 /**
  * Simple key-value object for homoglyphs conversion
@@ -80,6 +81,13 @@ export interface Options {
    *  @defaultValue <code>['en', 'es', 'de']</code>
    */
   confusables?: string[]
+
+  /**
+   * Max cache items to store
+   * @defaultValue 100
+   * @type {[type]}
+   */
+  maxCacheSize?: number
 }
 
 /**
@@ -91,6 +99,7 @@ interface RequiredOptions {
   specialChars: RegExp
   spaceChars: string[]
   confusables: string[]
+  maxCacheSize: number
 }
 
 /**
@@ -114,7 +123,8 @@ const DEFAULT_OPTIONS = {
   placeholder: '***',
   specialChars: /\d|[!@#$%^&*()[\];:'",.?\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/,
   spaceChars: ['', '.', '-', '_', ';', '|'],
-  confusables: ['en', 'es', 'de']
+  confusables: ['en', 'es', 'de'],
+  maxCacheSize: 100
 }
 
 /**
@@ -150,6 +160,13 @@ class BadWordsNext {
   data: DataMap
 
   /**
+   * Clear memoized check
+   * @private
+   * @type {Function}
+   */
+  clear: Function
+
+  /**
    * Create an instance of BadWordsNext class
    *
    * @param {Options}
@@ -164,6 +181,10 @@ class BadWordsNext {
     this.words = []
     this.data = {}
 
+    const memoized = memoize(this.check, { max: this.opts.maxCacheSize })
+    this.check = memoized
+    this.clear = memoized.clear
+
     this.add(this.opts.data)
   }
 
@@ -173,6 +194,7 @@ class BadWordsNext {
    * @param {Data} data Dictionary data
    */
   add (data: Data): void {
+    this.clear()
     this.data[data.id] = data
 
     for (const word of data.words) {
