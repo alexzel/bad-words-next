@@ -1,7 +1,7 @@
 {
   "name": "bad-words-next",
   "version": "1.1.2",
-  "description": "Profanity filtering and detection",
+  "description": "JavaScript/TypeScript filter and checker for bad words aka profanity",
   "keywords": [
     "curse",
     "swear",
@@ -15,8 +15,11 @@
     "detect",
     "detector",
     "checker",
+    "sanitize",
     "dirty",
-    "obscene"
+    "utility",
+    "obscene",
+    "typescript"
   ],
   "repository": "https://github.com/alexzel/bad-words-next",
   "author": "Alex Zelensky",

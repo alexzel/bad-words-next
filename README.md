@@ -1,8 +1,6 @@
 # bad-words-next
 
-Profanity filtering and detection.
-
-Quick overnight project. Feel free to contribute.
+JavaScript/TypeScript filter and checker for bad words aka profanity.
 
 API documentation in [GitHub Wiki](https://github.com/alexzel/bad-words-next/wiki/BadWordsNext).
 
