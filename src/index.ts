@@ -40,10 +40,21 @@ export interface Data {
 }
 
 /**
- * Dictionaries data map
+ * Internal dictionaries data format
  */
-interface DataMap {
-  [key: string]: Data
+interface InternalData extends Data {
+  /**
+   * Regular expression for dictionary words
+   * @type {RegExp}
+   */
+  regexp: RegExp
+}
+
+/**
+ * Internal dictionaries data map
+ */
+interface InternalDataMap {
+  [key: string]: InternalData
 }
 
 /**
@@ -72,7 +83,7 @@ export interface Options {
 
   /**
    * Pseudo space chars, a list of values for `_` symbol replacement in a dictionary word string
-   * @defaultValue <code>['', '.', '-', '_', ';', '|']</code>
+   * @defaultValue <code>['', '.', '-', ';', '|']</code>
    */
   spaceChars?: string[]
 
@@ -94,7 +105,7 @@ export interface Options {
  * Required constructor options for internal store
  */
 interface RequiredOptions {
-  data: Data
+  data?: Data
   placeholder: string
   specialChars: RegExp
   spaceChars: string[]
@@ -103,26 +114,13 @@ interface RequiredOptions {
 }
 
 /**
- * Internal word representation
- */
-interface Word {
-  id: string
-  expr: string
-}
-
-/**
  * Default options object to use in BadWordsNext class contructor
  * @type {Object}
  */
 const DEFAULT_OPTIONS = {
-  data: {
-    id: 'default',
-    words: [],
-    lookalike: {}
-  },
   placeholder: '***',
   specialChars: /\d|[!@#$%^&*()[\];:'",.?\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/,
-  spaceChars: ['', '.', '-', '_', ';', '|'],
+  spaceChars: ['', '.', '-', ';', '|'],
   confusables: ['en', 'es', 'de'],
   maxCacheSize: 100
 }
@@ -146,18 +144,18 @@ class BadWordsNext {
   specialChars: string
 
   /**
-   * Words list arrived from dictionaries data
+   * Dictionaries ids list
    * @private
-   * @type {Word[]}
+   * @type {string[]}
    */
-  words: Word[]
+  ids: string[]
 
   /**
    * Dictionaries data map with data ID as a key
    * @private
    * @type {DataMap}
    */
-  data: DataMap
+  data: InternalDataMap
 
   /**
    * Clear memoized check
@@ -177,15 +175,16 @@ class BadWordsNext {
       : DEFAULT_OPTIONS
 
     this.specialChars = this.opts.specialChars.toString().slice(1, -1)
-
-    this.words = []
     this.data = {}
+    this.ids = []
 
     const memoized = memoize(this.check, { max: this.opts.maxCacheSize })
     this.check = memoized
     this.clear = memoized.clear
 
-    this.add(this.opts.data)
+    if (this.opts.data !== undefined) {
+      this.add(this.opts.data)
+    }
   }
 
   /**
@@ -195,7 +194,8 @@ class BadWordsNext {
    */
   add (data: Data): void {
     this.clear()
-    this.data[data.id] = data
+
+    let regexp = ''
 
     for (const word of data.words) {
       let exp = word.replace(/[.?^${}()|[\]\\]/g, '\\$&').replace(/\b\*\b/, '')
@@ -208,20 +208,21 @@ class BadWordsNext {
         exp = `${exp.slice(0, -1)}[^\\s\\b$]*`
       }
 
-      this.words.push({
-        id: data.id,
-        expr: exp
-      })
+      regexp += regexp !== '' ? `|${exp}` : exp
 
       if (exp.includes('_')) {
         for (const ch of this.opts.spaceChars) {
-          this.words.push({
-            id: data.id,
-            expr: exp.replace(/_/g, ch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-          })
+          regexp += `|${exp.replace(/_/g, ch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}`
         }
       }
     }
+
+    this.data[data.id] = {
+      ...data,
+      regexp: this.regexp(regexp)
+    }
+
+    this.ids.push(data.id)
   }
 
   /**
@@ -251,7 +252,7 @@ class BadWordsNext {
    */
   regexp (expr: string): RegExp {
     return new RegExp(
-      `(?:^|\\b|\\s)(?:${this.specialChars})*${expr}(?:${this.specialChars})*(?:$|\\b|\\s)`, 'i'
+      `(?:^|\\b|\\s)(?:${this.specialChars})*(?:${expr})(?:${this.specialChars})*(?:$|\\b|\\s)`, 'i'
     )
   }
 
@@ -262,8 +263,8 @@ class BadWordsNext {
    * @return {Boolean}
    */
   check (str: string): Boolean {
-    for (const word of this.words) {
-      if (this.regexp(word.expr).test(str) || this.regexp(word.expr).test(this.prepare(str, word.id))) {
+    for (const id of this.ids) {
+      if (this.data[id].regexp.test(str) || this.data[id].regexp.test(this.prepare(str, id))) {
         return true
       }
     }

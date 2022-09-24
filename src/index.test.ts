@@ -14,12 +14,17 @@ describe('index', () => {
     it('creates new instance without options', () => {
       const badwords = new BadWordsNext()
       expect(badwords).toHaveProperty('opts')
-      expect(badwords).toHaveProperty('opts.data')
+      expect(badwords).not.toHaveProperty('opts.data')
+      expect(badwords).toHaveProperty('opts.placeholder')
+      expect(badwords).toHaveProperty('opts.specialChars')
+      expect(badwords).toHaveProperty('opts.spaceChars')
+      expect(badwords).toHaveProperty('opts.confusables')
     })
 
     it('creates new instance with default options', () => {
       const badwords = new BadWordsNext({ data: en })
       expect(badwords).toHaveProperty('opts')
+      expect(badwords).toHaveProperty('opts.data')
       expect(badwords).toHaveProperty('opts.placeholder')
       expect(badwords).toHaveProperty('opts.specialChars')
       expect(badwords).toHaveProperty('opts.spaceChars')
