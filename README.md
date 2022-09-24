@@ -89,6 +89,6 @@ interface Options {
 
 ## Notes
 
-- Dictionary words with spaces won't work
+- Dictionary words with spaces won't work b/c they do not represent a single word
 
 - Dictionaries have to be improved over time
