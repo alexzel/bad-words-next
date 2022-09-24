@@ -40,24 +40,6 @@ export interface Data {
 }
 
 /**
- * Internal dictionaries data format
- */
-interface InternalData extends Data {
-  /**
-   * Regular expression for dictionary words
-   * @type {RegExp}
-   */
-  regexp: RegExp
-}
-
-/**
- * Internal dictionaries data map
- */
-interface InternalDataMap {
-  [key: string]: InternalData
-}
-
-/**
  * Constructor options
  */
 export interface Options {
@@ -102,15 +84,33 @@ export interface Options {
 }
 
 /**
- * Required constructor options for internal store
+ * Internal options with required properties
  */
-interface RequiredOptions {
+interface InternalOptions {
   data?: Data
   placeholder: string
   specialChars: RegExp
   spaceChars: string[]
   confusables: string[]
   maxCacheSize: number
+}
+
+/**
+ * Internal dictionaries data format
+ */
+interface InternalData extends Data {
+  /**
+   * Regular expression for dictionary words
+   * @type {RegExp}
+   */
+  regexp: RegExp
+}
+
+/**
+ * Internal dictionaries data map
+ */
+interface InternalDataMap {
+  [key: string]: InternalData
 }
 
 /**
@@ -134,7 +134,7 @@ class BadWordsNext {
    * @private
    * @type {RequiredOptions}
    */
-  opts: RequiredOptions
+  opts: InternalOptions
 
   /**
    * Special chars represented as string from specialChars regular expression
