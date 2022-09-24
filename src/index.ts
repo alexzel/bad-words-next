@@ -132,7 +132,7 @@ class BadWordsNext {
   /**
    * Options object built from options passed into constructor and default options object
    * @private
-   * @type {RequiredOptions}
+   * @type {InternalOptions}
    */
   opts: InternalOptions
 
