@@ -137,7 +137,7 @@ class BadWordsNext {
   opts: InternalOptions
 
   /**
-   * Special chars represented as string from specialChars regular expression
+   * Special chars represented as a string from specialChars regular expression
    * @private
    * @type {string}
    */
@@ -226,7 +226,7 @@ class BadWordsNext {
   }
 
   /**
-   * Prepare a string by replacing dictionary lookalikes and homoglyphs
+   * Prepare a string by replacing dictionary lookalikes and confusables
    *
    * @private
    * @param  {string} str input string
@@ -244,7 +244,7 @@ class BadWordsNext {
   }
 
   /**
-   * Create regular expression by dictionary word expression string
+   * Create regular expression by dictionary expression string
    *
    * @private
    * @param  {string}
