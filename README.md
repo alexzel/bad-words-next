@@ -71,28 +71,36 @@ badwords.add(ch)
 
 ```ts
 interface Data {
-  id: string  // unique ID
-  words: string[] // words list, supports `*` on start and end of a string to indicate any characters, also `+` for one or more repeating characters, and `_` for special characters.
-  lookalike: Lookalike // map for homoglyphs conversion
+  id: string  // Unique dictionary ID
+  words: string[] // Words list
+  lookalike: Lookalike // Lookalike homoglyphs map
 }
 
 interface Lookalike {
-  [key: string | number]: string // just a simple key-value object
+  [key: string | number]: string // Simple key-value object
 }
 ```
+
+You can use the following pattern characters in a word string:
+
+- `*` indicates any characters, use it only on start and/or end of a word
+- `+` indicates one or more repeating characters
+- `_` indicates special characters
 
 ## Options
 
 ```ts
 interface Options {
   data?: Data // Dictionary data
-  placeholder?: string // Filter placeholder - default value '***'
-  specialChars?: RegExp // Special chars to allow on word start and word end - default value /\d|[!@#$%^&*()[\];:'",.?\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/
-  spaceChars?: string[] // Pseudo space chars, a list of values for `_` symbol in a dictionary word string - default value ['', '.', '-', ';', '|']
+  placeholder?: string // Filter placeholder - default '***'
+  specialChars?: RegExp // Special chars to allow on start and/or end of a word - default /\d|[!@#$%^&*()[\];:'",.?\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/
+  spaceChars?: string[] // Pseudo space chars, a list of values for `_` symbol in a dictionary word string - default ['', '.', '-', ';', '|']
   confusables?: string[] // List of ids to apply transformations from `confusables` npm package - default ['en', 'es', 'de']
-  maxCacheSize?: number // Max items to store in cache - default value 100
+  maxCacheSize?: number // Max items to store in cache - default 100
 }
 ```
+
+See [Options API](https://github.com/alexzel/bad-words-next/wiki/Options) for more details.
 
 ## Notes
 
