@@ -1,7 +1,7 @@
 # bad-words-next
 
-![workflows-nodejs-ci](https://github.com/alexzel/bad-words-next/actions/workflows/node-ci.yml/badge.svg)
-![workflows-wiki-doc](https://github.com/alexzel/bad-words-next/actions/workflows/wiki-doc.yml/badge.svg)
+![workflows-nodejs-ci](https://github.com/alexzel/bad-words-next/actions/workflows/node-ci.yml/badge.svg?branch=main)
+![workflows-wiki-doc](https://github.com/alexzel/bad-words-next/actions/workflows/wiki-doc.yml/badge.svg?branch=main)
 ![npm version](https://img.shields.io/npm/v/bad-words-next)
 ![NPM license](https://img.shields.io/npm/l/bad-words-next)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/bad-words-next)
