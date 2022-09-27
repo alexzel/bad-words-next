@@ -22,6 +22,7 @@
     "typescript"
   ],
   "repository": "https://github.com/alexzel/bad-words-next",
+  "homepage": "https://github.com/alexzel/bad-words-next/wiki",
   "author": "Alex Zelensky",
   "license": "MIT",
   "scripts": {
