@@ -21,7 +21,7 @@ export default [
       }
     ],
     external: [
-      'memoizee',
+      'moize',
       'confusables'
     ],
     plugins: [

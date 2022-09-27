@@ -7,7 +7,7 @@
  */
 
 import { remove } from 'confusables'
-import memoize from 'memoizee'
+import moize from 'moize'
 
 /**
  * Simple key-value object for homoglyphs conversion
@@ -178,7 +178,7 @@ class BadWordsNext {
     this.data = {}
     this.ids = []
 
-    const memoized = memoize(this.check, { max: this.opts.maxCacheSize })
+    const memoized = moize(this.check, { maxSize: this.opts.maxCacheSize })
     this.check = memoized
     this.clear = memoized.clear
 
