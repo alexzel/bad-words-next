@@ -57,7 +57,7 @@ export interface Options {
   placeholder?: string
 
   /**
-   * Special chars to allow on start and end of a word
+   * Special chars to allow on start and/or end of a word
    * @defaultValue <code>/\d|[!@#$%^&*()[\\];:'",.?\\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/</code>
    * @type {[type]}
    */
