@@ -128,6 +128,7 @@ describe('index', () => {
 
       it('checks words with lookalike chars', () => {
         expect(badwords.check('H@хуйA')).toBeTruthy()
+        expect(badwords.check('C🆈к🇦!')).toBeTruthy()
       })
 
       it('checks words with good chars', () => {
@@ -149,6 +150,14 @@ describe('index', () => {
       it('checks words', () => {
         expect(badwords.check('zalupa')).toBeTruthy()
       })
+
+      it('checks words with lookalike chars', () => {
+        expect(badwords.check('3@luPa')).toBeTruthy()
+      })
+
+      it('checks confusables', () => {
+        expect(badwords.check('𝔁🆈u')).toBeTruthy()
+      })
     })
 
     describe('filter()', () => {
@@ -164,6 +173,10 @@ describe('index', () => {
     describe('check()', () => {
       it('checks words', () => {
         expect(badwords.check('то є падлюка така мала')).toBeTruthy()
+      })
+
+      it('checks words with lookalike chars', () => {
+        expect(badwords.check('п🅸3д🇦то')).toBeTruthy()
       })
     })
 

@@ -95,7 +95,7 @@ interface Options {
   placeholder?: string // Filter placeholder - default '***'
   specialChars?: RegExp // Special chars to allow on start and/or end of a word - default /\d|[!@#$%^&*()[\];:'",.?\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/
   spaceChars?: string[] // Pseudo space chars, a list of values for `_` symbol in a dictionary word string - default ['', '.', '-', ';', '|']
-  confusables?: string[] // List of ids to apply transformations from `confusables` npm package - default ['en', 'es', 'de']
+  confusables?: string[] // List of ids to apply transformations from `confusables` npm package - default ['en', 'es', 'de', 'ru_lat']
   maxCacheSize?: number // Max items to store in cache - default 100
 }
 ```

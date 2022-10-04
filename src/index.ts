@@ -9,6 +9,14 @@
 import { remove } from 'confusables'
 import moize from 'moize'
 
+function escapeRegexpWord (word: string): string {
+  return word.replace(/[.?^${}()|[\]\\]/g, '\\$&').replace(/\b\*\b/, '')
+}
+
+function escapeRegexpString (str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 /**
  * Simple key-value object for homoglyphs conversion
  */
@@ -71,7 +79,7 @@ export interface Options {
 
   /**
    *  List of dictionary ids to apply transformations from [confusables](https://github.com/gc/confusables) npm package
-   *  @defaultValue <code>['en', 'es', 'de']</code>
+   *  @defaultValue <code>['en', 'es', 'de', 'ru_lat']</code>
    */
   confusables?: string[]
 
@@ -103,7 +111,13 @@ interface InternalData extends Data {
    * Regular expression for dictionary words
    * @type {RegExp}
    */
-  regexp: RegExp
+  wordsRegexp: RegExp
+
+  /**
+   * Regular expression for lookalikes
+   * @type {RegExp}
+   */
+  lookalikeRegexp?: RegExp
 }
 
 /**
@@ -121,7 +135,7 @@ const DEFAULT_OPTIONS = {
   placeholder: '***',
   specialChars: /\d|[!@#$%^&*()[\];:'",.?\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/,
   spaceChars: ['', '.', '-', ';', '|'],
-  confusables: ['en', 'es', 'de'],
+  confusables: ['en', 'es', 'de', 'ru_lat'],
   maxCacheSize: 100
 }
 
@@ -196,9 +210,10 @@ class BadWordsNext {
     this.clear()
 
     let regexp = ''
+    let lookalike = ''
 
     for (const word of data.words) {
-      let exp = word.replace(/[.?^${}()|[\]\\]/g, '\\$&').replace(/\b\*\b/, '')
+      let exp = escapeRegexpWord(word)
       if (exp === '') continue
 
       if (exp.startsWith('*')) {
@@ -212,14 +227,23 @@ class BadWordsNext {
 
       if (exp.includes('_')) {
         for (const ch of this.opts.spaceChars) {
-          regexp += `|${exp.replace(/_/g, ch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))}`
+          regexp += `|${exp.replace(/_/g, escapeRegexpString(ch))}`
         }
       }
     }
 
+    for (const key in data.lookalike) {
+      const esc = escapeRegexpString(key)
+      lookalike += lookalike !== '' ? `|${esc}` : esc
+    }
+
     this.data[data.id] = {
       ...data,
-      regexp: this.regexp(regexp)
+      wordsRegexp: this.regexp(regexp)
+    }
+
+    if (lookalike !== '') {
+      this.data[data.id].lookalikeRegexp = new RegExp(lookalike, 'ig')
     }
 
     this.ids.push(data.id)
@@ -234,11 +258,22 @@ class BadWordsNext {
    * @return {string}
    */
   prepare (str: string, id: string): string {
-    const s = str.split('').map(
-      ch => this.data[id].lookalike[ch] === undefined
-        ? ch
-        : this.data[id].lookalike[ch]
-    ).join('')
+    let s = str
+
+    if (this.data[id].lookalikeRegexp !== undefined) {
+      s = str.replace(this.data[id].lookalikeRegexp as RegExp, (m) => {
+        if (this.data[id].lookalike[m] !== undefined) {
+          return this.data[id].lookalike[m]
+        }
+
+        const ml = m.toLowerCase()
+        if (this.data[id].lookalike[ml] !== undefined) {
+          return this.data[id].lookalike[ml]
+        }
+
+        return m
+      })
+    }
 
     return this.opts.confusables.includes(id) ? remove(s) : s
   }
@@ -264,7 +299,7 @@ class BadWordsNext {
    */
   check (str: string): Boolean {
     for (const id of this.ids) {
-      if (this.data[id].regexp.test(str) || this.data[id].regexp.test(this.prepare(str, id))) {
+      if (this.data[id].wordsRegexp.test(str) || this.data[id].wordsRegexp.test(this.prepare(str, id))) {
         return true
       }
     }
