@@ -1,13 +1,11 @@
-/**
- * bad-words-next
- *
- * @author Alex Zelensky
- * @copyright Copyright (c) 2022, Alex Zelensky. (MIT License)
- * @license MIT
- */
-
 import { remove } from 'confusables'
 import moize from 'moize'
+
+/**
+ * @license bad-words-next
+ * Copyright (c) 2022, Alex Zelensky. (MIT License)
+ * https://github.com/alexzel/bad-words-next
+ */
 
 function escapeRegexpWord (word: string): string {
   return word.replace(/[.?^${}()|[\]\\]/g, '\\$&').replace(/\b\*\b/, '')
