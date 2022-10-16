@@ -25,8 +25,8 @@
     "az+hol",
     "az+hole*",
     "b_d_s_m",
-    "ballbag*",
-    "ballsack*",
+    "ball+bag*",
+    "ball+sack*",
     "bastard*",
     "bbc",
     "bellend",
@@ -222,7 +222,7 @@
     "whore",
     "wtf",
     "xrated",
-    "zoo+phili*"
+    "zo+phili*"
   ],
   "lookalike": {
     "$": "s",
