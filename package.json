@@ -67,6 +67,7 @@
     "moize": "^6.1.3"
   },
   "babel": {
+    "comments": false,
     "presets": [
       "@babel/preset-typescript",
       "@babel/preset-env"
