@@ -32,7 +32,7 @@
     "cleanup": "git tag -d $(git tag) && git fetch --all --tags && git clean --force -d -x && git reset --hard origin/main && git checkout main"
   },
   "main": "lib/index.js",
-  "module": "lib/index.jsm",
+  "module": "lib/index.mjs",
   "types": "lib/index.d.ts",
   "files": [
     "lib",
