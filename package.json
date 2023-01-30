@@ -24,7 +24,7 @@
     "build": "rollup -c",
     "test": "jest",
     "pretest": "yarn lint && tsc --noEmit",
-    "lint": "eslint ./src",
+    "lint": "eslint ./src ./test",
     "doc": "typedoc --options typedoc.json",
     "release": "yarn version",
     "preversion": "yarn install && yarn build && yarn test && yarn doc",
@@ -36,7 +36,8 @@
   "types": "lib/index.d.ts",
   "files": [
     "lib",
-    "data"
+    "data",
+    "test"
   ],
   "devDependencies": {
     "@babel/core": "^7.20.12",

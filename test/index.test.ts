@@ -1,4 +1,4 @@
-import BadWordsNext from './index'
+import BadWordsNext from '../src'
 import en from '../data/en.json'
 import ru from '../data/ru.json'
 import rl from '../data/ru_lat.json'
