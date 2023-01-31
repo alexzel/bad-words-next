@@ -1,6 +1,6 @@
 {
   "name": "bad-words-next",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "JavaScript/TypeScript filter and checker for bad words aka profanity",
   "keywords": [
     "curse",
