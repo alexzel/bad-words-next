@@ -47,7 +47,7 @@ const run = str => {
       console.log('\x1b[32m%s\x1b[0m', 'Benchmark results:')
       console.log()
       console.table(bench.tasks.map(({ name, result = {} }) =>
-        ({ 'Task Name': name, 'Average Time (ps)': (result.mean || 0) * 1000, 'Variance (ps)': (result.variance || 0) * 1000 })));
+        ({ 'Task Name': name, 'Average Time (ps)': (result.mean || 0) * 1000, 'Variance (ps)': (result.variance || 0) * 1000 })))
       console.log()
       console.log('\x1b[32m%s\x1b[0m', 'Check results:')
       console.log()
