@@ -37,7 +37,8 @@
   "files": [
     "lib",
     "data",
-    "test"
+    "test",
+    "benchmark"
   ],
   "devDependencies": {
     "@babel/core": "^7.20.12",
@@ -57,6 +58,7 @@
     "rollup": "^2.79.1",
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-dts": "^4.2.3",
+    "tinybench": "^2.3.1",
     "typedoc": "^0.23.24",
     "typedoc-github-wiki-theme": "^1.0.1",
     "typedoc-plugin-markdown": "^3.14.0",
