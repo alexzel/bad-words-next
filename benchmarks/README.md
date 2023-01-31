@@ -1,4 +1,4 @@
-# Benchmark
+# Benchmarks
 
 ## Prepare
 
@@ -6,7 +6,7 @@
 yarn add leo-profanity bad-words
 ```
 
-## Run benchmark
+## Run
 
 ```sh
 node ./benchmark.js

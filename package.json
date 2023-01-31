@@ -38,7 +38,7 @@
     "lib",
     "data",
     "test",
-    "benchmark"
+    "benchmarks"
   ],
   "devDependencies": {
     "@babel/core": "^7.20.12",
