@@ -47,7 +47,10 @@ describe('index', () => {
       })
 
       it('filters with custom placeholder', () => {
-        const badwords = new BadWordsNext({ data: en, placeholder: '#' })
+        const badwords = new BadWordsNext({
+          data: en,
+          placeholder: '#'
+        })
         expect(badwords.filter('sex')).toBe('#')
       })
     })
@@ -112,13 +115,12 @@ describe('index', () => {
         expect(badwords.filter('see   cock-$ucking f@tfuckers @round')).toBe('see   *** *** @round')
       })
 
-      it('filters and analyzes bad words', () => {
-        expect(badwords.filterAndAnalyze('hello sex sex3 b0000b test b00b anyfuckany pussy cat')).toStrictEqual({
-          filtered: 'hello *** *** *** test *** *** *** cat',
-          detected: [
-            'sex', 'sex3', 'b0000b', 'b00b', 'anyfuckany', 'pussy'
-          ]
+      it('filters and reports back with callback function', () => {
+        const detected: string[] = []
+        badwords.filter('hello sex sex3 b0000b test b00b anyfuckany pussy cat', (badWord: string) => {
+          detected.push(badWord)
         })
+        expect(detected).toStrictEqual(['sex', 'sex3', 'b0000b', 'b00b', 'anyfuckany', 'pussy'])
       })
     })
   })

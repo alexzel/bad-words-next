@@ -308,9 +308,10 @@ class BadWordsNext {
    * Filter bad words in the input string and replace them with a placeholder
    *
    * @param  {string}
+   * @param  {(badWord: string) => void}
    * @return {string}
    */
-  filter (str: string): string {
+  filter (str: string, onBadword?: (badword: string) => void): string {
     if (str === '' || this.check(str) === false) return str
 
     const delims: string[] = []
@@ -322,49 +323,17 @@ class BadWordsNext {
     }
 
     return str.split(/[\b\s]/).map(
-      p => this.check(p) === true ? this.opts.placeholder : p
-    ).reduce((a, s, i) => (a + (i > 0 ? delims[i - 1] === undefined ? ' ' : delims[i - 1] : '') + s), '')
-  }
-
-  /**
-   * Filter bad words in the input string and replace them with a placeholder
-   * Returns list of detected words and the filtered string
-   *
-   * @param  {string}
-   * @return { filtered: string, detected: string[] }
-   */
-  filterAndAnalyze (str: string): { filtered: string, detected: string[] } {
-    if (str === '' || this.check(str) === false) {
-      return {
-        filtered: str,
-        detected: []
-      }
-    }
-
-    const delims: string[] = []
-    const re = /([\b\s])/g
-
-    let match
-    while ((match = re.exec(str)) !== null) {
-      delims.push(match[0])
-    }
-
-    const detected: string[] = []
-    const filtered = str.split(/[\b\s]/).map(
       p => {
         if (this.check(p) === true) {
-          detected.push(p)
+          if (onBadword !== undefined) {
+            onBadword(p)
+          }
           return this.opts.placeholder
         } else {
           return p
         }
       }
     ).reduce((a, s, i) => (a + (i > 0 ? delims[i - 1] === undefined ? ' ' : delims[i - 1] : '') + s), '')
-
-    return {
-      filtered,
-      detected
-    }
   }
 }
 
