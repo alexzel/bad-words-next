@@ -308,9 +308,10 @@ class BadWordsNext {
    * Filter bad words in the input string and replace them with a placeholder
    *
    * @param  {string}
+   * @param  {(badWord: string) => void}
    * @return {string}
    */
-  filter (str: string): string {
+  filter (str: string, onBadword?: (badword: string) => void): string {
     if (str === '' || this.check(str) === false) return str
 
     const delims: string[] = []
@@ -322,7 +323,16 @@ class BadWordsNext {
     }
 
     return str.split(/[\b\s]/).map(
-      p => this.check(p) === true ? this.opts.placeholder : p
+      p => {
+        if (this.check(p) === true) {
+          if (onBadword !== undefined) {
+            onBadword(p)
+          }
+          return this.opts.placeholder
+        } else {
+          return p
+        }
+      }
     ).reduce((a, s, i) => (a + (i > 0 ? delims[i - 1] === undefined ? ' ' : delims[i - 1] : '') + s), '')
   }
 }

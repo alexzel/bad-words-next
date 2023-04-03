@@ -111,6 +111,14 @@ describe('index', () => {
       it('filters bad words with spaces', () => {
         expect(badwords.filter('see   cock-$ucking f@tfuckers @round')).toBe('see   *** *** @round')
       })
+
+      it('filters and reports back with callback function', () => {
+        const detected: string[] = []
+        badwords.filter('hello sex sex3 b0000b test b00b anyfuckany pussy cat', (badWord: string) => {
+          detected.push(badWord)
+        })
+        expect(detected).toStrictEqual(['sex', 'sex3', 'b0000b', 'b00b', 'anyfuckany', 'pussy'])
+      })
     })
   })
 
