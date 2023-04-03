@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.6](https://github.com/alexzel/bad-words-next/compare/v1.6.5...v1.6.6) (2023-04-03)
+
+
+### Bug Fixes
+
+* remove wiki workflow badge ([6625662](https://github.com/alexzel/bad-words-next/commit/6625662514814b483efacfe9f84d932f55d68747))
+
 ## [1.6.5](https://github.com/alexzel/bad-words-next/compare/v1.6.4...v1.6.5) (2023-04-03)
 
 
