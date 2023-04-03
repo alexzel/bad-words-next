@@ -37,6 +37,7 @@ jobs:
       - name: Build and publish
         run: |
           cd $GITHUB_WORKSPACE/bad-words-next
+          yarn
           yarn build
           yarn publish
         env:
