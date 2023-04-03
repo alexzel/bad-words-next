@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.4](https://github.com/alexzel/bad-words-next/compare/v1.6.3...v1.6.4) (2023-04-03)
+
+
+### Bug Fixes
+
+* fix release script ([9650142](https://github.com/alexzel/bad-words-next/commit/96501421fe4ea8c3ba1e16c85c02773571efd80f))
+
 ## [1.6.3](https://github.com/alexzel/bad-words-next/compare/v1.6.2...v1.6.3) (2023-04-03)
 
 
