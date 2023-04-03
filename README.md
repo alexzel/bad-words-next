@@ -38,6 +38,9 @@ console.log(badwords.check('S0me sh!tt is here'))
 // Returns filtered string with masked bad words
 console.log(badwords.filter('S0me sh!tt is here'))
 // will print `S0me *** is here`
+
+console.log(badwords.filterAndAnalyze('S0me sh!tt is here'))
+// will print { filtered: 'S0me *** is here', detected: ['sh!tt'] }
 ```
 
 ## Add more dictionaries
