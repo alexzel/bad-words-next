@@ -47,10 +47,7 @@ describe('index', () => {
       })
 
       it('filters with custom placeholder', () => {
-        const badwords = new BadWordsNext({
-          data: en,
-          placeholder: '#'
-        })
+        const badwords = new BadWordsNext({ data: en, placeholder: '#' })
         expect(badwords.filter('sex')).toBe('#')
       })
     })
