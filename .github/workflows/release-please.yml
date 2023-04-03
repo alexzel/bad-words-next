@@ -1,0 +1,39 @@
+name: release-please
+
+on:
+  push:
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  release-please:
+    permissions:
+      contents: write # to create release commit
+      pull-requests: write # to create release PR
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          package-name: bad-words-next
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org'
+          always-auth: true
+      - run: yarn
+      - run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        if: ${{ steps.release.outputs.release_created }}
+
