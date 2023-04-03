@@ -13,3 +13,11 @@
 ### Miscellaneous Chores
 
 * release 1.6.1 ([5976ab5](https://github.com/alexzel/bad-words-next/commit/5976ab51d2ada16bb4bf3200361527a7953a68f7))
+
+
+## [1.6.0](https://github.com/alexzel/bad-words-next/compare/v1.5.3...v1.6.0) (2023-04-03)
+
+
+### Features
+
+* added optional onBadword callback to the filter method ([0065215](https://github.com/alexzel/bad-words-next/commit/0065215d95570c4be04e669231e773432d4e464e))
