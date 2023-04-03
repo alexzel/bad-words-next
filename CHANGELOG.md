@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.5](https://github.com/alexzel/bad-words-next/compare/v1.6.4...v1.6.5) (2023-04-03)
+
+
+### Bug Fixes
+
+* add missing prepare husky script ([dc40aa0](https://github.com/alexzel/bad-words-next/commit/dc40aa0beeccc31aa6045281cda67295fc35a3d6))
+
 ## [1.6.4](https://github.com/alexzel/bad-words-next/compare/v1.6.3...v1.6.4) (2023-04-03)
 
 
