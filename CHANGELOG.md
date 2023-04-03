@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.6.7](https://github.com/alexzel/bad-words-next/compare/v1.6.6...v1.6.7) (2023-04-03)
+
+
+### Features
+
+* **data:** update dictionaries ([f685c6e](https://github.com/alexzel/bad-words-next/commit/f685c6e0e67c8edb2da9e9389c7c99a3a95e00a5))
+
+
+### Miscellaneous Chores
+
+* release 1.6.7 ([e239169](https://github.com/alexzel/bad-words-next/commit/e239169e7b441eb1635780ef7fa5f9966a9cffba))
+
 ## [1.6.6](https://github.com/alexzel/bad-words-next/compare/v1.6.5...v1.6.6) (2023-04-03)
 
 
