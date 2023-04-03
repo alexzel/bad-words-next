@@ -39,8 +39,9 @@ console.log(badwords.check('S0me sh!tt is here'))
 console.log(badwords.filter('S0me sh!tt is here'))
 // will print `S0me *** is here`
 
-badwords.filter('S0me sh!tt is here', (badword) => {
-  console.log(badword);
+// Returns filtered string and catches bad words
+badwords.filter('S0me sh!tt is here', badword => {
+  console.log(badword)
 })
 // will print `sh!tt`
 ```

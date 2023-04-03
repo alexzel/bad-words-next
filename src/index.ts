@@ -308,7 +308,7 @@ class BadWordsNext {
    * Filter bad words in the input string and replace them with a placeholder
    *
    * @param  {string}
-   * @param  {(badWord: string) => void}
+   * @param  {(badword: string) => void}
    * @return {string}
    */
   filter (str: string, onBadword?: (badword: string) => void): string {
@@ -322,18 +322,18 @@ class BadWordsNext {
       delims.push(match[0])
     }
 
-    return str.split(/[\b\s]/).map(
-      p => {
+    return str
+      .split(/[\b\s]/)
+      .map(p => {
         if (this.check(p) === true) {
           if (onBadword !== undefined) {
             onBadword(p)
           }
           return this.opts.placeholder
-        } else {
-          return p
         }
-      }
-    ).reduce((a, s, i) => (a + (i > 0 ? delims[i - 1] === undefined ? ' ' : delims[i - 1] : '') + s), '')
+        return p
+      })
+      .reduce((a, s, i) => (a + (i > 0 ? delims[i - 1] === undefined ? ' ' : delims[i - 1] : '') + s), '')
   }
 }
 
