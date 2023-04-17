@@ -47,7 +47,7 @@ badwords.filter('S0me sh!tt is here', badword => {
 
 ## Add more dictionaries
 
-```sh
+```js
 const BadWordsNext = require('bad-words-next')
 
 const en = require('bad-words-next/data/en.json')
