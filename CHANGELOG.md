@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/alexzel/bad-words-next/compare/v2.0.0...v2.0.1) (2023-06-02)
+
+
+### Bug Fixes
+
+* fix typedoc missing plugins ([a85a9ee](https://github.com/alexzel/bad-words-next/commit/a85a9ee30296feb594ce88ebb7fca1bd7cfc5133))
+
 ## [2.0.0](https://github.com/alexzel/bad-words-next/compare/v1.6.8...v2.0.0) (2023-06-02)
 
 
