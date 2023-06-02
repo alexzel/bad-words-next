@@ -3,7 +3,7 @@
   "tsconfig": "./tsconfig.json",
   "entryPoints": "./src/index.ts",
   "entryPointStrategy": "expand",
-  "out": "doc",
+  "out": "docs",
   "theme": "github-wiki",
   "includeVersion": true,
   "excludePrivate": true,
