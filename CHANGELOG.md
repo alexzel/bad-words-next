@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.0.0](https://github.com/alexzel/bad-words-next/compare/v1.6.8...v2.0.0) (2023-06-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* convert benchmark to esm
+* fix rollup build
+* fix ts warnings and use different types
+* convert package to esm and bump latest dependencies
+
+### Features
+
+* convert package to esm and bump latest dependencies ([479824a](https://github.com/alexzel/bad-words-next/commit/479824a6e3ecaef467443b6b57a488ea9a4d394f))
+
+
+### Bug Fixes
+
+* convert benchmark to esm ([28ea0f3](https://github.com/alexzel/bad-words-next/commit/28ea0f3164df538de124fb993e44edfcf7ecd87a))
+* fix rollup build ([d73190e](https://github.com/alexzel/bad-words-next/commit/d73190ee4dcc12a2a451f88f218706a2755fc0e0))
+* fix ts warnings and use different types ([1044011](https://github.com/alexzel/bad-words-next/commit/1044011d103a8163dcd422770c98783a82fa9a26))
+
 ## [1.6.8](https://github.com/alexzel/bad-words-next/compare/v1.6.7...v1.6.8) (2023-06-02)
 
 
