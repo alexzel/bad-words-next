@@ -18,9 +18,7 @@ function escapeRegexpString (str: string): string {
 /**
  * Simple key-value object for homoglyphs conversion
  */
-export interface Lookalike {
-  [key: string | number]: string
-}
+export type Lookalike = Record<string | number, string>
 
 /**
  * Dictionary data format
@@ -121,9 +119,7 @@ interface InternalData extends Data {
 /**
  * Internal dictionaries data map
  */
-interface InternalDataMap {
-  [key: string]: InternalData
-}
+type InternalDataMap = Record<string, InternalData>
 
 /**
  * Default options object to use in BadWordsNext class contructor
@@ -172,9 +168,9 @@ class BadWordsNext {
   /**
    * Clear memoized check
    * @private
-   * @type {Function}
+   * @type {() => void}
    */
-  clear: Function
+  clear: () => void
 
   /**
    * Create an instance of BadWordsNext class
@@ -295,7 +291,7 @@ class BadWordsNext {
    * @param  {string}
    * @return {Boolean}
    */
-  check (str: string): Boolean {
+  check (str: string): boolean {
     for (const id of this.ids) {
       if (this.data[id].wordsRegexp.test(str) || this.data[id].wordsRegexp.test(this.prepare(str, id))) {
         return true
@@ -312,7 +308,7 @@ class BadWordsNext {
    * @return {string}
    */
   filter (str: string, onCatch?: (badword: string) => void): string {
-    if (str === '' || this.check(str) === false) return str
+    if (str === '' || !this.check(str)) return str
 
     const delims: string[] = []
     const re = /([\b\s])/g
@@ -325,7 +321,7 @@ class BadWordsNext {
     return str
       .split(/[\b\s]/)
       .map(word => {
-        if (this.check(word) === true) {
+        if (this.check(word)) {
           if (onCatch !== undefined) {
             onCatch(word)
           }
