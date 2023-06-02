@@ -1,21 +1,20 @@
-'use strict'
+import Bench from 'tinybench'
+import BadWords from 'bad-words'
+import leo from 'leo-profanity'
 
-const { Bench } = require('tinybench')
+import BadWordsNext from '../lib/index.js'
 
-const BadWords = require('bad-words')
-const leo = require('leo-profanity')
-
-const BadWordsNext = require('../')
-const en = require('../data/en.json')
+const en = (await import('module'))
+  .createRequire(import.meta.url)('../data/en.json')
 
 const badwords = new BadWords()
 const badwordsNext = new BadWordsNext({ data: en })
 
 let counter = 0
-const run = str => {
+const run = async (str) => {
   const bench = new Bench({ time: 100 })
 
-  bench
+  await bench
     .add('BadWordsNext:check', () => {
       badwordsNext.check(str)
     })
@@ -35,35 +34,30 @@ const run = str => {
     .add('BadWords:filter', () => {
       badwords.clean(str)
     })
-
     .run()
-    .then(() => {
-      console.log('\x1b[34m%s\x1b[0m', `Run #${++counter}`)
-      console.log()
-      console.log('\x1b[32m%s\x1b[0m', 'Input string:')
-      console.log()
-      console.log(str)
-      console.log()
-      console.log('\x1b[32m%s\x1b[0m', 'Benchmark results:')
-      console.log()
-      console.table(bench.tasks.map(({ name, result = {} }) =>
-        ({ 'Task Name': name, 'Average Time (ps)': (result.mean || 0) * 1000, 'Variance (ps)': (result.variance || 0) * 1000 })))
-      console.log()
-      console.log('\x1b[32m%s\x1b[0m', 'Check results:')
-      console.log()
-      console.log('BadWordsNext:check', badwordsNext.check(str))
-      console.log('LeoProfanity:check', leo.check(str))
-      console.log('BadWords:check', badwords.isProfane(str))
-      console.log()
-    })
-    .catch(e => {
-      console.error(e)
-    })
+
+  console.log('\x1b[34m%s\x1b[0m', `Run #${++counter}`)
+  console.log()
+  console.log('\x1b[32m%s\x1b[0m', 'Input string:')
+  console.log()
+  console.log(str)
+  console.log()
+  console.log('\x1b[32m%s\x1b[0m', 'Benchmark results:')
+  console.log()
+  console.table(bench.tasks.map(({ name, result = {} }) =>
+    ({ 'Task Name': name, 'Average Time (ps)': (result.mean || 0) * 1000, 'Variance (ps)': (result.variance || 0) * 1000 })))
+  console.log()
+  console.log('\x1b[32m%s\x1b[0m', 'Check results:')
+  console.log()
+  console.log('BadWordsNext:check', badwordsNext.check(str))
+  console.log('LeoProfanity:check', leo.check(str))
+  console.log('BadWords:check', badwords.isProfane(str))
+  console.log()
 }
 
-run('Test word sex here and many words in this string as well as many possibilities to check and filter. We test this string and get some results.')
-run('S0me sh!tt is here. just\t $hittt \n   and \ng0 \n@$hol b00bs and d1cks \n end')
-run(`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel dolor at felis tempor euismod. Integer ac dictum lorem, quis malesuada enim. Ut at lacinia nibh, vitae faucibus lectus. Morbi efficitur sodales eros et hendrerit. Praesent porttitor fringilla nunc, nec malesuada nisl faucibus sit amet. Cras leo est, finibus quis ligula sed, lacinia feugiat tortor. Suspendisse pulvinar dui massa, id pulvinar sapien porta vitae.
+await run('Test word sex here and many words in this string as well as many possibilities to check and filter. We test this string and get some results.')
+await run('S0me sh!tt is here. just\t $hittt \n   and \ng0 \n@$hol b00bs and d1cks \n end')
+await run(`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel dolor at felis tempor euismod. Integer ac dictum lorem, quis malesuada enim. Ut at lacinia nibh, vitae faucibus lectus. Morbi efficitur sodales eros et hendrerit. Praesent porttitor fringilla nunc, nec malesuada nisl faucibus sit amet. Cras leo est, finibus quis ligula sed, lacinia feugiat tortor. Suspendisse pulvinar dui massa, id pulvinar sapien porta vitae.
 
 Morbi mollis sapien at justo hendrerit, non ullamcorper dui vehicula. Praesent venenatis tellus a ante laoreet egestas sit amet non nibh. Suspendisse commodo malesuada leo sit amet pharetra. Aliquam sed interdum est, id hendrerit ante. Vestibulum quis leo id leo viverra ultricies. Quisque eu accumsan nisl, cursus mollis ipsum. Sed tincidunt eleifend sem, eu dignissim quam accumsan vitae. Ut cursus enim eu porta maximus. Nullam eget purus convallis, commodo mauris nec, dapibus ante. Interdum et malesuada fames ac ante ipsum primis in faucibus.
 
