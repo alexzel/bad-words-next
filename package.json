@@ -25,7 +25,7 @@
     "test": "jest",
     "pretest": "yarn lint && tsc --noEmit",
     "lint": "eslint ./src ./test",
-    "docs": "typedoc --options typedoc.json",
+    "docs": "typedoc --plugin typedoc-plugin-markdown --plugin typedoc-github-wiki-theme --plugin typedoc-plugin-rename-defaults --options typedoc.json",
     "release": "yarn version",
     "preversion": "yarn install && yarn build && yarn test && yarn docs",
     "postversion": "git push --tags && yarn publish . --new-version $npm_package_version && git push && echo Successfully released version $npm_package_version!",
