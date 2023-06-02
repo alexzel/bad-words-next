@@ -9,12 +9,12 @@ export default [
     input: `src/${MAIN_FILE}.ts`,
     output: [
       {
-        file: `lib/${MAIN_FILE}.mjs`,
-        format: 'es',
+        file: `lib/${MAIN_FILE}.js`,
+        format: 'esm',
         exports: 'default'
       },
       {
-        file: `lib/${MAIN_FILE}.js`,
+        file: `lib/${MAIN_FILE}.cjs`,
         format: 'cjs',
         exports: 'auto'
       }
@@ -35,7 +35,7 @@ export default [
     input: `src/${MAIN_FILE}.ts`,
     output: {
       file: `lib/${MAIN_FILE}.d.ts`,
-      format: 'es'
+      format: 'esm'
     },
     plugins: [
       dts()
