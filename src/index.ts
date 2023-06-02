@@ -311,7 +311,7 @@ class BadWordsNext {
    * @param  {(badword: string) => void}
    * @return {string}
    */
-  filter (str: string, onBadword?: (badword: string) => void): string {
+  filter (str: string, onCatch?: (badword: string) => void): string {
     if (str === '' || this.check(str) === false) return str
 
     const delims: string[] = []
@@ -324,16 +324,24 @@ class BadWordsNext {
 
     return str
       .split(/[\b\s]/)
-      .map(p => {
-        if (this.check(p) === true) {
-          if (onBadword !== undefined) {
-            onBadword(p)
+      .map(word => {
+        if (this.check(word) === true) {
+          if (onCatch !== undefined) {
+            onCatch(word)
           }
           return this.opts.placeholder
         }
-        return p
+        return word
       })
-      .reduce((a, s, i) => (a + (i > 0 ? delims[i - 1] === undefined ? ' ' : delims[i - 1] : '') + s), '')
+      .reduce((acc, word, i) => {
+        return acc +
+          (i > 0
+            ? delims[i - 1] === undefined
+              ? ' '
+              : delims[i - 1]
+            : '') +
+          word
+      }, '')
   }
 }
 
