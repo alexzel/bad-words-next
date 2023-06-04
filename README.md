@@ -81,9 +81,7 @@ interface Data {
   lookalike: Lookalike // Lookalike homoglyphs map
 }
 
-interface Lookalike {
-  [key: string | number]: string // Simple key-value object
-}
+type Lookalike = Record<string | number, string> // Simple key-value object
 ```
 
 You can use the following pattern characters in a word string:
