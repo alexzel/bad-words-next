@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.1.0](https://github.com/alexzel/bad-words-next/compare/v2.0.1...v2.1.0) (2023-06-04)
+
+
+### Features
+
+* **data:** improve en.json dictionary ([98d0d11](https://github.com/alexzel/bad-words-next/commit/98d0d115292a123f75f499384cd04b7b171ab50a))
+* **data:** improve ru.json and ru_lat.json dictionaries ([71c19b4](https://github.com/alexzel/bad-words-next/commit/71c19b4d0565e1755b7c2e043bd4f26a5e6be112))
+
 ## [2.0.1](https://github.com/alexzel/bad-words-next/compare/v2.0.0...v2.0.1) (2023-06-02)
 
 
