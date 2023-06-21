@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/alexzel/bad-words-next/compare/v2.1.0...v2.2.0) (2023-06-21)
+
+
+### Features
+
+* implement placeholderMode to address the feature request ([5aa1b76](https://github.com/alexzel/bad-words-next/commit/5aa1b763a0940383c3fa8676d5250050b13812d4))
+
 ## [2.1.0](https://github.com/alexzel/bad-words-next/compare/v2.0.1...v2.1.0) (2023-06-04)
 
 
