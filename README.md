@@ -96,6 +96,7 @@ You can use the following pattern characters in a word string:
 interface Options {
   data?: Data // Dictionary data
   placeholder?: string // Filter placeholder - default '***'
+  placeholderMode?: 'repeat' | 'replace' // Placeholder mode to either replace with or repeat the placeholder - default 'replace'
   specialChars?: RegExp // Special chars to allow on start and/or end of a word - default /\d|[!@#$%^&*()[\];:'",.?\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/
   spaceChars?: string[] // Pseudo space chars, a list of values for `_` symbol in a dictionary word string - default ['', '.', '-', ';', '|']
   confusables?: string[] // List of ids to apply transformations from `confusables` npm package - default ['en', 'es', 'de', 'ru_lat']

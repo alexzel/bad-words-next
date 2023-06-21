@@ -59,6 +59,11 @@ describe('index', () => {
         })
         expect(detected).toStrictEqual(['sex', 'sex3', 'b0000b', 'b00b', 'anyfuckany', 'pussy'])
       })
+
+      it('filters and replaces with repeated placeholder', () => {
+        const badwords = new BadWordsNext({ data: en, placeholder: '#', placeholderMode: 'repeat' })
+        expect(badwords.filter('$h1ttt')).toBe('######')
+      })
     })
   })
 

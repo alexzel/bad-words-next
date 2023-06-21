@@ -21,6 +21,12 @@ function escapeRegexpString (str: string): string {
 export type Lookalike = Record<string | number, string>
 
 /**
+ * Placeholder mode to either replace with or repeat the placeholder
+ * @type {String}
+ */
+export type PlaceholderMode = 'repeat' | 'replace'
+
+/**
  * Dictionary data format
  */
 export interface Data {
@@ -61,6 +67,13 @@ export interface Options {
   placeholder?: string
 
   /**
+   * Placeholder mode to either replace with or repeat the placeholder
+   * @defaultValue <code>'replace'</code>
+   * @type {[type]}
+   */
+  placeholderMode?: PlaceholderMode
+
+  /**
    * Special chars to allow on start and/or end of a word
    * @defaultValue <code>/\d|[!@#$%^&*()[\\];:'",.?\\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/</code>
    * @type {[type]}
@@ -93,6 +106,7 @@ export interface Options {
 interface InternalOptions {
   data?: Data
   placeholder: string
+  placeholderMode: PlaceholderMode
   specialChars: RegExp
   spaceChars: string[]
   confusables: string[]
@@ -127,6 +141,7 @@ type InternalDataMap = Record<string, InternalData>
  */
 const DEFAULT_OPTIONS = {
   placeholder: '***',
+  placeholderMode: 'replace' as const,
   specialChars: /\d|[!@#$%^&*()[\];:'",.?\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/,
   spaceChars: ['', '.', '-', ';', '|'],
   confusables: ['en', 'es', 'de', 'ru_lat'],
@@ -324,6 +339,9 @@ class BadWordsNext {
         if (this.check(word)) {
           if (onCatch !== undefined) {
             onCatch(word)
+          }
+          if (this.opts.placeholderMode === 'repeat') {
+            return this.opts.placeholder.repeat(word.length)
           }
           return this.opts.placeholder
         }
