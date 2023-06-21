@@ -333,6 +333,8 @@ class BadWordsNext {
       delims.push(match[0])
     }
 
+    const repeat = this.opts.placeholderMode === 'repeat'
+
     return str
       .split(/[\b\s]/)
       .map(word => {
@@ -340,7 +342,7 @@ class BadWordsNext {
           if (onCatch !== undefined) {
             onCatch(word)
           }
-          if (this.opts.placeholderMode === 'repeat') {
+          if (repeat) {
             return this.opts.placeholder.repeat(word.length)
           }
           return this.opts.placeholder
