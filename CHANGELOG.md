@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.1](https://github.com/alexzel/bad-words-next/compare/v2.2.0...v2.2.1) (2023-06-21)
+
+
+### Performance Improvements
+
+* move string comparison out of map ([99bc141](https://github.com/alexzel/bad-words-next/commit/99bc141d81fc2994622a83e93b489a763fc875db))
+
 ## [2.2.0](https://github.com/alexzel/bad-words-next/compare/v2.1.0...v2.2.0) (2023-06-21)
 
 
