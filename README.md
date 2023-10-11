@@ -43,6 +43,11 @@ badwords.filter('S0me sh!tt is here', badword => {
   console.log(badword)
 })
 // will print `sh!tt`
+
+// Use exclusions
+const badwords = new BadWordsNext({ data: en }, { exclusions: ['sh!tt'] })
+console.log(badwords.filter('S0me sh!tt is here'))
+// will keep the `sh!tt` word
 ```
 
 ## Add more dictionaries
@@ -101,6 +106,7 @@ interface Options {
   spaceChars?: string[] // Pseudo space chars, a list of values for `_` symbol in a dictionary word string - default ['', '.', '-', ';', '|']
   confusables?: string[] // List of ids to apply transformations from `confusables` npm package - default ['en', 'es', 'de', 'ru_lat']
   maxCacheSize?: number // Max items to store in cache - default 100
+  exclusions?: string[] // The list of exclusions
 }
 ```
 
