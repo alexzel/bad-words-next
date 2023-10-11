@@ -98,6 +98,11 @@ export interface Options {
    * @type {[type]}
    */
   maxCacheSize?: number
+
+  /**
+   * The list of exclusions
+   */
+  exclusions?: string[]
 }
 
 /**
@@ -111,6 +116,7 @@ interface InternalOptions {
   spaceChars: string[]
   confusables: string[]
   maxCacheSize: number
+  exclusions: string[]
 }
 
 /**
@@ -145,7 +151,8 @@ const DEFAULT_OPTIONS = {
   specialChars: /\d|[!@#$%^&*()[\];:'",.?\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/,
   spaceChars: ['', '.', '-', ';', '|'],
   confusables: ['en', 'es', 'de', 'ru_lat'],
-  maxCacheSize: 100
+  maxCacheSize: 100,
+  exclusions: []
 }
 
 /**
@@ -303,10 +310,19 @@ class BadWordsNext {
   /**
    * Check whether the input string contains bad words or not
    *
-   * @param  {string}
+   * @param {string} str
+   * @param {boolean} isWord
    * @return {Boolean}
    */
-  check (str: string): boolean {
+  check (str: string, isWord: boolean = true): boolean {
+    if (isWord && this.opts.exclusions.length > 0) {
+      for (const exclusion of this.opts.exclusions) {
+        if (this.regexp(exclusion).test(str)) {
+          return false
+        }
+      }
+    }
+
     for (const id of this.ids) {
       if (this.data[id].wordsRegexp.test(str) || this.data[id].wordsRegexp.test(this.prepare(str, id))) {
         return true
@@ -323,7 +339,7 @@ class BadWordsNext {
    * @return {string}
    */
   filter (str: string, onCatch?: (badword: string) => void): string {
-    if (str === '' || !this.check(str)) return str
+    if (str === '' || !this.check(str, false)) return str
 
     const delims: string[] = []
     const re = /([\b\s])/g
