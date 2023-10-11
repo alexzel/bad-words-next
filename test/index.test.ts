@@ -64,6 +64,11 @@ describe('index', () => {
         const badwords = new BadWordsNext({ data: en, placeholder: '#', placeholderMode: 'repeat' })
         expect(badwords.filter('$h1ttt')).toBe('######')
       })
+
+      it('filters with exclusions', () => {
+        const badwords = new BadWordsNext({ data: en, exclusions: ['sex'] })
+        expect(badwords.filter('sex: male sh1t')).toBe('sex: male ***')
+      })
     })
   })
 
