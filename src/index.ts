@@ -181,6 +181,11 @@ class BadWordsNext {
   ids: string[]
 
   /**
+   * Prepared regexps for exclusions
+   */
+  exclusionsRegexps: RegExp[]
+
+  /**
    * Dictionaries data map with data ID as a key
    * @private
    * @type {DataMap}
@@ -207,6 +212,7 @@ class BadWordsNext {
     this.specialChars = this.opts.specialChars.toString().slice(1, -1)
     this.data = {}
     this.ids = []
+    this.exclusionsRegexps = []
 
     const memoized = moize(this.check, { maxSize: this.opts.maxCacheSize })
     this.check = memoized
@@ -214,6 +220,10 @@ class BadWordsNext {
 
     if (this.opts.data !== undefined) {
       this.add(this.opts.data)
+    }
+
+    if (this.opts.exclusions !== undefined) {
+      this.exclusionsRegexps = this.opts.exclusions.map<RegExp>(this.regexp.bind(this))
     }
   }
 
@@ -316,8 +326,8 @@ class BadWordsNext {
    */
   check (str: string, isWord: boolean = true): boolean {
     if (isWord && this.opts.exclusions.length > 0) {
-      for (const exclusion of this.opts.exclusions) {
-        if (this.regexp(exclusion).test(str)) {
+      for (const exclusionRegexp of this.exclusionsRegexps) {
+        if (exclusionRegexp.test(str)) {
           return false
         }
       }
