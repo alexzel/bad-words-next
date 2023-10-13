@@ -69,6 +69,23 @@ describe('index', () => {
         const badwords = new BadWordsNext({ data: en, exclusions: ['sex'] })
         expect(badwords.filter('sex: male sh1t')).toBe('sex: male ***')
       })
+
+      it('filters with exclusions containing lookalikes', () => {
+        const badwords = new BadWordsNext({ data: en, exclusions: ['shit'] })
+        expect(badwords.filter('sh1t happens')).toBe('sh1t happens')
+      })
+
+      it('only preCheck called if there are no bad words', () => {
+        const badwords = new BadWordsNext({ data: en })
+
+        const spyCheck = jest.spyOn(badwords, 'check')
+        const spyPreCheck = jest.spyOn(badwords, 'preCheck')
+
+        badwords.filter('A text without badwords')
+
+        expect(spyPreCheck).toBeCalledTimes(1)
+        expect(spyCheck).toBeCalledTimes(0)
+      })
     })
   })
 
