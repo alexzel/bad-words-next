@@ -321,20 +321,35 @@ class BadWordsNext {
    * Check whether the input string contains bad words or not
    *
    * @param {string} str
-   * @param {boolean} isWord
    * @return {Boolean}
    */
-  check (str: string, isWord: boolean = true): boolean {
-    if (isWord && this.opts.exclusions.length > 0) {
-      for (const exclusionRegexp of this.exclusionsRegexps) {
-        if (exclusionRegexp.test(str)) {
-          return false
-        }
+  preCheck (str: string): boolean {
+    for (const id of this.ids) {
+      if (this.data[id].wordsRegexp.test(str) || this.data[id].wordsRegexp.test(this.prepare(str, id))) {
+        return true
       }
     }
 
+    return false
+  }
+
+  /**
+   * Check whether the particular word is bad or not
+   *
+   * @param {string} word
+   * @return {Boolean}
+   */
+  check (word: string): boolean {
     for (const id of this.ids) {
-      if (this.data[id].wordsRegexp.test(str) || this.data[id].wordsRegexp.test(this.prepare(str, id))) {
+      if (this.exclusionsRegexps.length > 0) {
+        for (const exclusionRegexp of this.exclusionsRegexps) {
+          if (exclusionRegexp.test(this.prepare(word, id))) {
+            return false
+          }
+        }
+      }
+
+      if (this.data[id].wordsRegexp.test(word) || this.data[id].wordsRegexp.test(this.prepare(word, id))) {
         return true
       }
     }
@@ -349,7 +364,7 @@ class BadWordsNext {
    * @return {string}
    */
   filter (str: string, onCatch?: (badword: string) => void): string {
-    if (str === '' || !this.check(str, false)) return str
+    if (str === '' || !this.preCheck(str)) return str
 
     const delims: string[] = []
     const re = /([\b\s])/g
