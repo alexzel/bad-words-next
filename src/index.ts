@@ -98,6 +98,11 @@ export interface Options {
    * @type {[type]}
    */
   maxCacheSize?: number
+
+  /**
+   * The list of exclusions
+   */
+  exclusions?: string[]
 }
 
 /**
@@ -111,6 +116,7 @@ interface InternalOptions {
   spaceChars: string[]
   confusables: string[]
   maxCacheSize: number
+  exclusions: string[]
 }
 
 /**
@@ -145,7 +151,8 @@ const DEFAULT_OPTIONS = {
   specialChars: /\d|[!@#$%^&*()[\];:'",.?\-_=+~`|]|a|(?:the)|(?:el)|(?:la)/,
   spaceChars: ['', '.', '-', ';', '|'],
   confusables: ['en', 'es', 'de', 'ru_lat'],
-  maxCacheSize: 100
+  maxCacheSize: 100,
+  exclusions: []
 }
 
 /**
@@ -174,6 +181,11 @@ class BadWordsNext {
   ids: string[]
 
   /**
+   * Prepared regexps for exclusions
+   */
+  exclusionsRegexps: RegExp[]
+
+  /**
    * Dictionaries data map with data ID as a key
    * @private
    * @type {DataMap}
@@ -200,6 +212,7 @@ class BadWordsNext {
     this.specialChars = this.opts.specialChars.toString().slice(1, -1)
     this.data = {}
     this.ids = []
+    this.exclusionsRegexps = []
 
     const memoized = moize(this.check, { maxSize: this.opts.maxCacheSize })
     this.check = memoized
@@ -207,6 +220,10 @@ class BadWordsNext {
 
     if (this.opts.data !== undefined) {
       this.add(this.opts.data)
+    }
+
+    if (this.opts.exclusions !== undefined) {
+      this.exclusionsRegexps = this.opts.exclusions.map<RegExp>(this.regexp.bind(this))
     }
   }
 
@@ -303,12 +320,36 @@ class BadWordsNext {
   /**
    * Check whether the input string contains bad words or not
    *
-   * @param  {string}
+   * @param {string} str
    * @return {Boolean}
    */
-  check (str: string): boolean {
+  preCheck (str: string): boolean {
     for (const id of this.ids) {
       if (this.data[id].wordsRegexp.test(str) || this.data[id].wordsRegexp.test(this.prepare(str, id))) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  /**
+   * Check whether the particular word is bad or not
+   *
+   * @param {string} word
+   * @return {Boolean}
+   */
+  check (word: string): boolean {
+    for (const id of this.ids) {
+      if (this.exclusionsRegexps.length > 0) {
+        for (const exclusionRegexp of this.exclusionsRegexps) {
+          if (exclusionRegexp.test(this.prepare(word, id))) {
+            return false
+          }
+        }
+      }
+
+      if (this.data[id].wordsRegexp.test(word) || this.data[id].wordsRegexp.test(this.prepare(word, id))) {
         return true
       }
     }
@@ -323,7 +364,7 @@ class BadWordsNext {
    * @return {string}
    */
   filter (str: string, onCatch?: (badword: string) => void): string {
-    if (str === '' || !this.check(str)) return str
+    if (str === '' || !this.preCheck(str)) return str
 
     const delims: string[] = []
     const re = /([\b\s])/g
