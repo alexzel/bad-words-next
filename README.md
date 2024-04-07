@@ -45,7 +45,7 @@ badwords.filter('S0me sh!tt is here', badword => {
 // will print `sh!tt`
 
 // Use exclusions
-const badwords = new BadWordsNext({ data: en, exclusions: ['shit'] })
+const badwords = new BadWordsNext({ data: en, exclusions: ['sh+it+' /*works with lookalikes or the actual words*/] })
 console.log(badwords.filter('S0me sh!tt is here'))
 // will keep the `sh!tt` word
 ```
