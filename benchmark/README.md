@@ -4,6 +4,7 @@
 
 ```sh
 yarn add leo-profanity bad-words
+yarn build
 ```
 
 ## Run benchmark
