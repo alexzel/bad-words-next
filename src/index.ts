@@ -93,7 +93,7 @@ export interface Options {
   confusables?: string[]
 
   /**
-   * Max items to store in cache
+   * Max items to store in the internal cache
    * @defaultValue 100
    * @type {[type]}
    */
@@ -174,16 +174,16 @@ class BadWordsNext {
   specialChars: string
 
   /**
+   * Prepared regexps for exclusions
+   */
+  exclusionsRegexps: RegExp[]
+
+  /**
    * Dictionaries ids list
    * @private
    * @type {string[]}
    */
   ids: string[]
-
-  /**
-   * Prepared regexps for exclusions
-   */
-  exclusionsRegexps: RegExp[]
 
   /**
    * Dictionaries data map with data ID as a key
@@ -210,20 +210,27 @@ class BadWordsNext {
       : DEFAULT_OPTIONS
 
     this.specialChars = this.opts.specialChars.toString().slice(1, -1)
+    this.exclusionsRegexps = this.opts.exclusions.map<RegExp>(this.regexp.bind(this))
     this.data = {}
     this.ids = []
-    this.exclusionsRegexps = []
 
-    const memoized = moize(this.check, { maxSize: this.opts.maxCacheSize })
-    this.check = memoized
-    this.clear = memoized.clear
+    // maxCacheSize is distributed between check and preCheck functions
+    // in theory preCheck contains less items so we give it one third of maxCacheSize
+    const preCheckMaxCacheSize = Math.max(0, Math.floor(this.opts.maxCacheSize / 3))
+
+    const moizedPreCheck = moize(this.preCheck, { maxSize: preCheckMaxCacheSize })
+    this.preCheck = moizedPreCheck
+
+    const moizedCheck = moize(this.check, { maxSize: this.opts.maxCacheSize - preCheckMaxCacheSize })
+    this.check = moizedCheck
+
+    this.clear = () => {
+      moizedPreCheck.clear()
+      moizedCheck.clear()
+    }
 
     if (this.opts.data !== undefined) {
       this.add(this.opts.data)
-    }
-
-    if (this.opts.exclusions !== undefined) {
-      this.exclusionsRegexps = this.opts.exclusions.map<RegExp>(this.regexp.bind(this))
     }
   }
 
@@ -318,10 +325,12 @@ class BadWordsNext {
   }
 
   /**
-   * Check whether the input string contains bad words or not
+   * Check whether the input string contains bad words or not.
+   * Note: it does not take into consideration the exclusions list.
    *
+   * @private
    * @param {string} str
-   * @return {Boolean}
+   * @return {boolean}
    */
   preCheck (str: string): boolean {
     for (const id of this.ids) {
@@ -337,19 +346,34 @@ class BadWordsNext {
    * Check whether the particular word is bad or not
    *
    * @param {string} word
-   * @return {Boolean}
+   * @return {boolean}
    */
   check (word: string): boolean {
     for (const id of this.ids) {
-      if (this.exclusionsRegexps.length > 0) {
-        for (const exclusionRegexp of this.exclusionsRegexps) {
-          if (exclusionRegexp.test(this.prepare(word, id))) {
-            return false
-          }
+      // We calculate prepared word only once and only when it's needed
+      let preparedWord: string | null = null
+
+      // Check exclusions
+      for (const exclusionRegexp of this.exclusionsRegexps) {
+        if (exclusionRegexp.test(word)) {
+          return false
+        }
+        if (preparedWord === null) {
+          preparedWord = this.prepare(word, id)
+        }
+        if (exclusionRegexp.test(preparedWord)) {
+          return false
         }
       }
 
-      if (this.data[id].wordsRegexp.test(word) || this.data[id].wordsRegexp.test(this.prepare(word, id))) {
+      // Check bad words
+      if (this.data[id].wordsRegexp.test(word)) {
+        return true
+      }
+      if (preparedWord === null) {
+        preparedWord = this.prepare(word, id)
+      }
+      if (this.data[id].wordsRegexp.test(preparedWord)) {
         return true
       }
     }
