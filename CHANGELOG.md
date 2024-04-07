@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.1](https://github.com/alexzel/bad-words-next/compare/v2.3.0...v2.3.1) (2024-04-07)
+
+
+### Bug Fixes
+
+* add build command into benchmarks readme file ([42d84f7](https://github.com/alexzel/bad-words-next/commit/42d84f71c3a986c1d8cb0170c2bd0db8a0d4573e))
+* use lookalike instead of the actual bad word in the readme ([71668ae](https://github.com/alexzel/bad-words-next/commit/71668aeb8f2c6030b26467ab7969cd4a0cbefb49))
+
 ## [2.3.0](https://github.com/alexzel/bad-words-next/compare/v2.2.1...v2.3.0) (2024-04-07)
 
 
