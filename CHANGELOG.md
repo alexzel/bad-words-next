@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.3.0](https://github.com/alexzel/bad-words-next/compare/v2.2.1...v2.3.0) (2024-04-07)
+
+
+### Features
+
+* a test for exclusions ([6efc106](https://github.com/alexzel/bad-words-next/commit/6efc1066577064c2cef384535dad520db1d22b4f))
+* ability to add exclusions ([97c08b9](https://github.com/alexzel/bad-words-next/commit/97c08b9086ca7185271c82470bb06874c9597a4c))
+* example how to use exclusions ([5893721](https://github.com/alexzel/bad-words-next/commit/589372104179e4847347dac06634a20ee16cc550))
+
+
+### Bug Fixes
+
+* compile exclusions regexps only once ([8184425](https://github.com/alexzel/bad-words-next/commit/8184425fb6ee85a802f817475e167273d6387222))
+* improve exclusions performance by employing internal cache ([b798d8a](https://github.com/alexzel/bad-words-next/commit/b798d8a2529b5b5cf9c0df980284168a77c53d88))
+* readme example was fixed ([09dcf02](https://github.com/alexzel/bad-words-next/commit/09dcf02c77803db3d820dd5adcf551d39ed09672))
+
 ## [2.2.1](https://github.com/alexzel/bad-words-next/compare/v2.2.0...v2.2.1) (2023-06-21)
 
 
