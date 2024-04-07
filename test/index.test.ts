@@ -19,6 +19,8 @@ describe('index', () => {
       expect(badwords).toHaveProperty('opts.specialChars')
       expect(badwords).toHaveProperty('opts.spaceChars')
       expect(badwords).toHaveProperty('opts.confusables')
+      expect(badwords).toHaveProperty('opts.maxCacheSize')
+      expect(badwords).toHaveProperty('opts.exclusions')
     })
 
     it('creates new instance with default options', () => {
@@ -29,6 +31,8 @@ describe('index', () => {
       expect(badwords).toHaveProperty('opts.specialChars')
       expect(badwords).toHaveProperty('opts.spaceChars')
       expect(badwords).toHaveProperty('opts.confusables')
+      expect(badwords).toHaveProperty('opts.maxCacheSize')
+      expect(badwords).toHaveProperty('opts.exclusions')
     })
 
     describe('add()', () => {
@@ -65,14 +69,28 @@ describe('index', () => {
         expect(badwords.filter('$h1ttt')).toBe('######')
       })
 
+      it('filters an empty string', () => {
+        const badwords = new BadWordsNext({ data: en })
+        expect(badwords.filter('')).toBe('')
+      })
+
       it('filters with exclusions', () => {
-        const badwords = new BadWordsNext({ data: en, exclusions: ['sex'] })
-        expect(badwords.filter('sex: male sh1t')).toBe('sex: male ***')
+        const data = { ...en, words: [...en.words, 'b@d'] }
+        const input = 'sex: sexy male sh1t ꮪ𝐞𝔁 ꮪ𝐞𝔁y semen $emen b@d bad'
+
+        let badwords = new BadWordsNext({ data })
+        expect(badwords.filter(input)).toBe('*** *** male *** *** *** *** *** *** bad')
+
+        badwords = new BadWordsNext({ data, exclusions: ['sex', 'semen', 'b@*'] })
+        expect(badwords.filter(input)).toBe('sex: *** male *** ꮪ𝐞𝔁 *** semen $emen b@d bad')
       })
 
       it('filters with exclusions containing lookalikes', () => {
-        const badwords = new BadWordsNext({ data: en, exclusions: ['shit'] })
-        expect(badwords.filter('sh1t happens')).toBe('sh1t happens')
+        let badwords = new BadWordsNext({ data: en })
+        expect(badwords.filter('shhhh1t++ happens')).toBe('*** happens')
+
+        badwords = new BadWordsNext({ data: en, exclusions: ['sh+it+'] })
+        expect(badwords.filter('shhhh1t++ happens')).toBe('shhhh1t++ happens')
       })
 
       it('only preCheck called if there are no bad words', () => {
@@ -95,6 +113,10 @@ describe('index', () => {
     describe('check()', () => {
       it('checks subwords', () => {
         expect(badwords.check('anyfuckany')).toBeTruthy()
+      })
+
+      it('checks an empty string', () => {
+        expect(badwords.check('')).toBeFalsy()
       })
 
       it('checks words at start', () => {
