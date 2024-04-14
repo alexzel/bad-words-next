@@ -34,7 +34,9 @@ const run = async (str) => {
     .add('BadWords:filter', () => {
       badwords.clean(str)
     })
-    .run()
+
+  await bench.warmup()
+  await bench.run()
 
   console.log('\x1b[34m%s\x1b[0m', `Run #${++counter}`)
   console.log()
@@ -45,7 +47,12 @@ const run = async (str) => {
   console.log('\x1b[32m%s\x1b[0m', 'Benchmark results:')
   console.log()
   console.table(bench.tasks.map(({ name, result = {} }) =>
-    ({ 'Task Name': name, 'Average Time (ps)': (result.mean || 0) * 1000, 'Variance (ps)': (result.variance || 0) * 1000 })))
+    ({
+      'Task Name': name,
+      'Average Time (ns)': (result.mean || 0) * 1e6,
+      'Variance (ns)': (result.variance || 0) * 1e6,
+      'ops/sec': parseInt(result.hz.toString(), 10)
+    })))
   console.log()
   console.log('\x1b[32m%s\x1b[0m', 'Check results:')
   console.log()
