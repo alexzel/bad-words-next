@@ -314,7 +314,7 @@ class BadWordsNext {
   }
 
   /**
-   * Create regular expression by dictionary expression string
+   * Create new regular expression by dictionary expression string
    *
    * @private
    * @param  {string}
@@ -328,7 +328,7 @@ class BadWordsNext {
 
   /**
    * Check whether the input string contains bad words or not.
-   * Note: it does not take into consideration the exclusions list.
+   * Note: it does not take into account the exclusions list.
    *
    * @private
    * @param {string} str
