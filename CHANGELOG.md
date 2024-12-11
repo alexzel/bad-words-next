@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.2](https://github.com/alexzel/bad-words-next/compare/v2.3.1...v2.3.2) (2024-12-11)
+
+
+### Bug Fixes
+
+* update libs usage to their latest interfaces ([d96238b](https://github.com/alexzel/bad-words-next/commit/d96238bebe8bffc160f7e248325654d26f69aa3b))
+* update lookalikes in en.json to treat 3 as E ([#19](https://github.com/alexzel/bad-words-next/issues/19)) ([6f78bbd](https://github.com/alexzel/bad-words-next/commit/6f78bbd5010a62622353a15496038d35d1870568))
+
 ## [2.3.1](https://github.com/alexzel/bad-words-next/compare/v2.3.0...v2.3.1) (2024-04-07)
 
 
