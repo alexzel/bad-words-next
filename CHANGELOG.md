@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.3](https://github.com/alexzel/bad-words-next/compare/v2.3.2...v2.3.3) (2024-12-11)
+
+
+### Bug Fixes
+
+* fix some types and props visibility for docs wiki ([9b8bc8f](https://github.com/alexzel/bad-words-next/commit/9b8bc8f37295a1b79fec4b0421f422cec0a3318c))
+
 ## [2.3.2](https://github.com/alexzel/bad-words-next/compare/v2.3.1...v2.3.2) (2024-12-11)
 
 
