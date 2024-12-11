@@ -175,6 +175,8 @@ class BadWordsNext {
 
   /**
    * Prepared regexps for exclusions
+   * @private
+   * @type {RegExp[]}
    */
   exclusionsRegexps: RegExp[]
 
@@ -188,7 +190,7 @@ class BadWordsNext {
   /**
    * Dictionaries data map with data ID as a key
    * @private
-   * @type {DataMap}
+   * @type {InternalDataMap}
    */
   data: InternalDataMap
 
@@ -338,7 +340,6 @@ class BadWordsNext {
         return true
       }
     }
-
     return false
   }
 
