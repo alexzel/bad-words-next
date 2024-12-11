@@ -3,7 +3,7 @@
 ## Prepare
 
 ```sh
-yarn add leo-profanity bad-words
+yarn add leo-profanity@1.7 bad-words@4
 yarn build
 ```
 

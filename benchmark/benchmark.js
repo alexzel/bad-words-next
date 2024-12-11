@@ -1,5 +1,5 @@
-import Bench from 'tinybench'
-import BadWords from 'bad-words'
+import {Bench} from 'tinybench'
+import {Filter} from 'bad-words'
 import leo from 'leo-profanity'
 
 import BadWordsNext from '../lib/index.js'
@@ -7,7 +7,7 @@ import BadWordsNext from '../lib/index.js'
 const en = (await import('module'))
   .createRequire(import.meta.url)('../data/en.json')
 
-const badwords = new BadWords()
+const badwords = new Filter()
 const badwordsNext = new BadWordsNext({ data: en })
 
 let counter = 0
