@@ -10,6 +10,8 @@ JavaScript/TypeScript filter and checker for bad words aka profanity.
 
 API documentation in [GitHub Wiki](https://github.com/alexzel/bad-words-next/wiki/BadWordsNext).
 
+*NOTE: we don't supply with raw json data files in version >= 3.0.0. See the example below to update paths in your import or require statements.*
+
 ## Install
 
 ```sh
