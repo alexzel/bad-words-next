@@ -20,3 +20,5 @@ tmp
 docs
 
 .env
+
+.rollup.cache
