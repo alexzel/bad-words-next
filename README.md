@@ -95,6 +95,24 @@ You can use the following pattern characters in a word string:
 - `+` indicates one or more repeating characters
 - `_` indicates special characters
 
+Here is an example of a typical data object:
+
+```js
+{
+  "id": "en",
+  "words": [
+    "any",      // just a word
+    "ba+d*",    // word `bad` with repeating `a` and anything after `d`
+    "*words*",  // word `words` with anything at start and end of it
+    "are_here"  // word `are_here` with pseudo space chars between `r` and `h`
+  ],
+  "lookalike": {
+    "@": "a",
+    "1": "i"
+  }
+}
+```
+
 ## Options
 
 ```ts
