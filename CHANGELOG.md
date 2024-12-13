@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.0.0](https://github.com/alexzel/bad-words-next/compare/v2.3.2...v3.0.0) (2024-12-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove json files and encode dictionaries b/c of sensitivity
+
+### Features
+
+* remove json files and encode dictionaries b/c of sensitivity ([e7a4758](https://github.com/alexzel/bad-words-next/commit/e7a475880d9e1632ebd1e1a6ef185063b0976130))
+* use decoder in benchmarks ([e650dea](https://github.com/alexzel/bad-words-next/commit/e650deacdce0add31e60decad314b985f854045d))
+
+
+### Bug Fixes
+
+* add rollup cache to .gitignore file ([95d1d51](https://github.com/alexzel/bad-words-next/commit/95d1d5167a9bb882777ed434e598bac707dc5166))
+* fix dictionary data import in benchmark script ([c6f50ae](https://github.com/alexzel/bad-words-next/commit/c6f50ae3cc4b9c6ffd6cf8a50b17a0f95d4fce92))
+* fix some types and props visibility for docs wiki ([9b8bc8f](https://github.com/alexzel/bad-words-next/commit/9b8bc8f37295a1b79fec4b0421f422cec0a3318c))
+* remove resolveJsonModule from typescript config ([65278e1](https://github.com/alexzel/bad-words-next/commit/65278e14fb5e7c4fc2c87b8bdb33de96e1a5baf2))
+
 ## [2.3.2](https://github.com/alexzel/bad-words-next/compare/v2.3.1...v2.3.2) (2024-12-11)
 
 
