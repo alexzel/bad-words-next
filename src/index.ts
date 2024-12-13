@@ -409,7 +409,17 @@ class BadWordsNext {
             onCatch(word)
           }
           if (repeat) {
-            return this.opts.placeholder.repeat(word.length)
+            return this.opts.placeholder.repeat(
+              // FIX: This should work with multi-byte utf8 chars
+              // See: skipped test for multi-byte utf8 chars
+              //
+              // There is a suggestion to use regexp and split
+              // See: https://gist.github.com/galdolber/1568e767fe69f9439874cc20c755b80e
+              //  word.split(/(\P{Mark}\p{Mark}*)/u).filter(Boolean).length
+              //
+              // But babel polyfills produce really large output for that regexp.
+              word.length
+            )
           }
           return this.opts.placeholder
         }

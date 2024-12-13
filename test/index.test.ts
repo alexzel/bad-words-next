@@ -1,13 +1,13 @@
 import BadWordsNext from '../src'
-import en from '../data/en.json'
-import ru from '../data/ru.json'
-import rl from '../data/ru_lat.json'
-import ua from '../data/ua.json'
-import es from '../data/es.json'
-import ch from '../data/ch.json'
-import fr from '../data/fr.json'
-import pl from '../data/pl.json'
-import de from '../data/de.json'
+import en from '../src/en'
+import ru from '../src/ru'
+import rl from '../src/ru_lat'
+import ua from '../src/ua'
+import es from '../src/es'
+import ch from '../src/ch'
+import fr from '../src/fr'
+import pl from '../src/pl'
+import de from '../src/de'
 
 describe('index', () => {
   describe('default', () => {
@@ -67,6 +67,24 @@ describe('index', () => {
       it('filters and replaces with repeated placeholder', () => {
         const badwords = new BadWordsNext({ data: en, placeholder: '#', placeholderMode: 'repeat' })
         expect(badwords.filter('$h1ttt')).toBe('######')
+      })
+
+      it.skip('filters and replaces with repeated placeholder multi-byte utf8 chars', () => {
+        const badwords = new BadWordsNext({
+          data: {
+            id: 'test',
+            words: ['𓆲', '𐐷', 'אֵ֗', 'ó', 'ὀ', 'е́'],
+            lookalike: {}
+          },
+          placeholder: '*',
+          placeholderMode: 'repeat'
+        })
+        expect(badwords.filter('𓆲')).toBe('*')
+        expect(badwords.filter('𐐷')).toBe('*')
+        expect(badwords.filter('אֵ֗')).toBe('*')
+        expect(badwords.filter('е́')).toBe('*')
+        expect(badwords.filter('ó')).toBe('*')
+        expect(badwords.filter('ὀ')).toBe('*')
       })
 
       it('filters an empty string', () => {
