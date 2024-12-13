@@ -77,7 +77,7 @@ badwords.add(pl)
 badwords.add(ch)
 ```
 
-## Dictionary files format
+## Dictionary data format
 
 ```ts
 interface Data {
