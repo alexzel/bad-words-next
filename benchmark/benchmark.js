@@ -5,8 +5,7 @@ import leo from 'leo-profanity'
 import BadWordsNext from '../lib/index.mjs'
 import {dt} from '../lib/decode.mjs'
 
-const en = (await import('module'))
-  .createRequire(import.meta.url)('../data/en.json')
+import en from '../lib/en.mjs'
 
 const badwords = new Filter()
 const badwordsNext = new BadWordsNext({ data: en })
