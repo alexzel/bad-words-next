@@ -1,22 +1,35 @@
+import fs from 'node:fs'
+import path from 'node:path'
+
 import babel from '@rollup/plugin-babel'
 import del from 'rollup-plugin-delete'
-import dts from 'rollup-plugin-dts'
+import typescript from '@rollup/plugin-typescript';
 
-const MAIN_FILE = 'index'
+const packageJson = JSON.parse(fs.readFileSync('./package.json'))
 
 export default [
   {
-    input: `src/${MAIN_FILE}.ts`,
+    input: Object.fromEntries(
+      Object.keys(packageJson.exports).map((chunk) => {
+        const source = packageJson.exports[chunk].default
+          .replace("/lib/", "/src/")
+          .replace(".mjs", ".ts");
+        const entry = source.replace(/\.\/src\/|\.ts/g, "");
+        return [entry, source];
+      }),
+    ),
     output: [
       {
-        file: `lib/${MAIN_FILE}.js`,
-        format: 'esm',
-        exports: 'default'
+        dir: 'lib',
+        format: 'es',
+        preserveModules: true,
+        entryFileNames: '[name].mjs'
       },
       {
-        file: `lib/${MAIN_FILE}.cjs`,
+        dir: 'lib',
         format: 'cjs',
-        exports: 'auto'
+        preserveModules: true,
+        entryFileNames: '[name].cjs'
       }
     ],
     external: [
@@ -28,17 +41,8 @@ export default [
       babel({
         babelHelpers: 'bundled',
         extensions: ['.js', '.ts']
-      })
-    ]
-  },
-  {
-    input: `src/${MAIN_FILE}.ts`,
-    output: {
-      file: `lib/${MAIN_FILE}.d.ts`,
-      format: 'esm'
-    },
-    plugins: [
-      dts()
-    ]
+      }),
+      typescript({tsconfig: './tsconfig.build.json'})
+    ],
   }
 ]
