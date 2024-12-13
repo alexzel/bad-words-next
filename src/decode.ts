@@ -66,7 +66,8 @@ const createBytesBuffer = typeof Uint8Array !== 'undefined'
   ? (bytes: number[]) => new Uint8Array(bytes)
   : (bytes: number[]) => Buffer.from(bytes)
 
-export default (hex: string): Data => {
+// Decode hex text
+export const dt = (hex: string): string => {
   let prev = ''
   let byte
   const bytes = []
@@ -83,7 +84,12 @@ export default (hex: string): Data => {
       prev += hex[i]
     }
   }
-  const json = (new PolyfilledTextDecoder()).decode(createBytesBuffer(bytes))
+  return (new PolyfilledTextDecoder()).decode(createBytesBuffer(bytes))
+}
+
+// Decode hex data
+export const dd = (hex: string): Data => {
+  const json = dt(hex)
   let obj
   try {
     obj = JSON.parse(json)
