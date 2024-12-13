@@ -1,4 +1,5 @@
 import BadWordsNext from '../src'
+
 import en from '../src/en'
 import ru from '../src/ru'
 import rl from '../src/ru_lat'
@@ -8,6 +9,31 @@ import ch from '../src/ch'
 import fr from '../src/fr'
 import pl from '../src/pl'
 import de from '../src/de'
+
+// NOTE: All profane strings are encoded to hex either in shell like this:
+// echo -n "test" | hexdump -v -e '/1 "%02X "' | tr -d ' '
+// or in Node.js like this:
+// Array.from(new TextEncoder().encode('test')).map(b => b.toString(16).padStart(2, '0')).join('')
+
+const decode = (hex: string): string => {
+  let prev = ''
+  let byte
+  const bytes = []
+  for (let i = 0; i < hex.length; i++) {
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    if (i & 1 && prev) {
+      byte = parseInt(prev + hex[i], 16)
+      if (isNaN(byte)) {
+        throw new Error('badWordsNext: incorrect hex string supplied as a dictionary')
+      }
+      bytes.push(byte)
+      prev = ''
+    } else {
+      prev += hex[i]
+    }
+  }
+  return (new TextDecoder()).decode(Buffer.from(bytes))
+}
 
 describe('index', () => {
   describe('default', () => {
@@ -38,35 +64,45 @@ describe('index', () => {
     describe('add()', () => {
       it('adds new data', () => {
         const badwords = new BadWordsNext()
-        expect(badwords.check('sex')).toBeFalsy()
+        const input = decode('736578')
+        expect(badwords.check(input)).toBeFalsy()
         badwords.add(en)
-        expect(badwords.check('sex')).toBeTruthy()
+        expect(badwords.check(input)).toBeTruthy()
       })
     })
 
     describe('filter()', () => {
       it('preserves word boundaries', () => {
         const badwords = new BadWordsNext({ data: en })
-        expect(badwords.filter('just\t $hittt \n   and \ng0 \n@$hol ')).toBe('just\t *** \n   and \ng0 \n*** ')
+        const input = decode('6a7573740920246869747474200a202020616e64200a6730200a4024686f6c20')
+        expect(badwords.filter(input)).toBe('just\t *** \n   and \ng0 \n*** ')
       })
 
       it('filters with custom placeholder', () => {
         const badwords = new BadWordsNext({ data: en, placeholder: '#' })
-        expect(badwords.filter('sex')).toBe('#')
+        const input = decode('736578')
+        expect(badwords.filter(input)).toBe('#')
       })
 
       it('filters and reports back with callback function', () => {
         const badwords = new BadWordsNext({ data: en })
+        const input = decode('68656c6c6f207365782073657833206230303030622074657374206230306220616e796675636b616e7920707573737920636174')
         const detected: string[] = []
-        badwords.filter('hello sex sex3 b0000b test b00b anyfuckany pussy cat', (badword: string) => {
-          detected.push(badword)
-        })
-        expect(detected).toStrictEqual(['sex', 'sex3', 'b0000b', 'b00b', 'anyfuckany', 'pussy'])
+        badwords.filter(input, (word: string) => detected.push(word))
+        expect(detected).toStrictEqual([
+          decode('736578'),
+          decode('73657833'),
+          decode('623030303062'),
+          decode('62303062'),
+          decode('616e796675636b616e79'),
+          decode('7075737379')
+        ])
       })
 
       it('filters and replaces with repeated placeholder', () => {
         const badwords = new BadWordsNext({ data: en, placeholder: '#', placeholderMode: 'repeat' })
-        expect(badwords.filter('$h1ttt')).toBe('######')
+        const input = decode('246831747474')
+        expect(badwords.filter(input)).toBe('######')
       })
 
       it.skip('filters and replaces with repeated placeholder multi-byte utf8 chars', () => {
@@ -94,21 +130,22 @@ describe('index', () => {
 
       it('filters with exclusions', () => {
         const data = { ...en, words: [...en.words, 'b@d'] }
-        const input = 'sex: sexy male sh1t ꮪ𝐞𝔁 ꮪ𝐞𝔁y semen $emen b@d bad'
+        const input = decode('7365783a2073657879206d616c65207368317420eaaeaaf09d909ef09d948120eaaeaaf09d909ef09d9481792073656d656e2024656d656e2062406420626164')
 
         let badwords = new BadWordsNext({ data })
         expect(badwords.filter(input)).toBe('*** *** male *** *** *** *** *** *** bad')
 
-        badwords = new BadWordsNext({ data, exclusions: ['sex', 'semen', 'b@*'] })
-        expect(badwords.filter(input)).toBe('sex: *** male *** ꮪ𝐞𝔁 *** semen $emen b@d bad')
+        badwords = new BadWordsNext({ data, exclusions: [decode('736578'), decode('73656d656e'), 'b@*'] })
+        expect(badwords.filter(input)).toBe(decode('7365783a202a2a2a206d616c65202a2a2a20eaaeaaf09d909ef09d9481202a2a2a2073656d656e2024656d656e2062406420626164'))
       })
 
       it('filters with exclusions containing lookalikes', () => {
-        let badwords = new BadWordsNext({ data: en })
-        expect(badwords.filter('shhhh1t++ happens')).toBe('*** happens')
+        const badwords1 = new BadWordsNext({ data: en })
+        const input = decode('736868686831742b2b2068617070656e73')
+        expect(badwords1.filter(input)).toBe('*** happens')
 
-        badwords = new BadWordsNext({ data: en, exclusions: ['sh+it+'] })
-        expect(badwords.filter('shhhh1t++ happens')).toBe('shhhh1t++ happens')
+        const badwords2 = new BadWordsNext({ data: en, exclusions: [decode('73682b69742b')] })
+        expect(badwords2.filter(input)).toBe(input)
       })
 
       it('only preCheck called if there are no bad words', () => {
@@ -130,7 +167,7 @@ describe('index', () => {
 
     describe('check()', () => {
       it('checks subwords', () => {
-        expect(badwords.check('anyfuckany')).toBeTruthy()
+        expect(badwords.check(decode('616e796675636b616e79'))).toBeTruthy()
       })
 
       it('checks an empty string', () => {
@@ -138,40 +175,40 @@ describe('index', () => {
       })
 
       it('checks words at start', () => {
-        expect(badwords.check('masturbate')).toBeTruthy()
+        expect(badwords.check(decode('6d617374757262617465'))).toBeTruthy()
       })
 
       it('checks whole words', () => {
-        expect(badwords.check('hore')).toBeTruthy()
+        expect(badwords.check(decode('686f7265'))).toBeTruthy()
       })
 
       it('checks words in sentence', () => {
-        expect(badwords.check('small titties are great')).toBeTruthy()
+        expect(badwords.check(decode('736d616c6c207469747469657320617265206772656174'))).toBeTruthy()
       })
 
       it('checks words with special chars boundary', () => {
-        expect(badwords.check('!!hore))')).toBeTruthy()
+        expect(badwords.check(decode('2121686f72652929'))).toBeTruthy()
       })
 
       it('checks words with repeating chars', () => {
-        expect(badwords.check('boooob')).toBeTruthy()
+        expect(badwords.check(decode('626f6f6f6f62'))).toBeTruthy()
       })
 
       it('checks words with lookalike chars', () => {
-        expect(badwords.check('800000b')).toBeTruthy()
-        expect(badwords.check('sh!+')).toBeTruthy()
-        expect(badwords.check('$ex')).toBeTruthy()
+        expect(badwords.check(decode('38303030303062'))).toBeTruthy()
+        expect(badwords.check(decode('7368212b'))).toBeTruthy()
+        expect(badwords.check(decode('246578'))).toBeTruthy()
       })
 
       it('checks words with special space chars', () => {
-        expect(badwords.check('blow-job')).toBeTruthy()
-        expect(badwords.check('blow_job')).toBeTruthy()
-        expect(badwords.check('blow.job')).toBeTruthy()
-        expect(badwords.check('blowjob')).toBeTruthy()
+        expect(badwords.check(decode('626c6f772d6a6f62'))).toBeTruthy()
+        expect(badwords.check(decode('626c6f775f6a6f62'))).toBeTruthy()
+        expect(badwords.check(decode('626c6f772e6a6f62'))).toBeTruthy()
+        expect(badwords.check(decode('626c6f776a6f62'))).toBeTruthy()
       })
 
       it('checks confusables', () => {
-        expect(badwords.check('ꮪ𝐞𝔁')).toBeTruthy()
+        expect(badwords.check(decode('eaaeaaf09d909ef09d9481'))).toBeTruthy()
       })
 
       it('checks words with good chars', () => {
@@ -181,11 +218,13 @@ describe('index', () => {
 
     describe('filter()', () => {
       it('filters bad words', () => {
-        expect(badwords.filter('hello sex sex3 b0000b test b00b anyfuckany pussy cat')).toBe('hello *** *** *** test *** *** *** cat')
+        const input = decode('68656c6c6f207365782073657833206230303030622074657374206230306220616e796675636b616e7920707573737920636174')
+        expect(badwords.filter(input)).toBe('hello *** *** *** test *** *** *** cat')
       })
 
       it('filters bad words with spaces', () => {
-        expect(badwords.filter('see   cock-$ucking f@tfuckers @round')).toBe('see   *** *** @round')
+        const input = decode('736565202020636f636b2d2475636b696e67206640746675636b6572732040726f756e64')
+        expect(badwords.filter(input)).toBe('see   *** *** @round')
       })
     })
   })
@@ -195,16 +234,16 @@ describe('index', () => {
 
     describe('check()', () => {
       it('checks subwords', () => {
-        expect(badwords.check('заебатенько')).toBeTruthy()
+        expect(badwords.check(decode('d0b7d0b0d0b5d0b1d0b0d182d0b5d0bdd18cd0bad0be'))).toBeTruthy()
       })
 
       it('checks whole words', () => {
-        expect(badwords.check('еб')).toBeTruthy()
+        expect(badwords.check(decode('d0b5d0b1'))).toBeTruthy()
       })
 
       it('checks words with lookalike chars', () => {
-        expect(badwords.check('H@хуйA')).toBeTruthy()
-        expect(badwords.check('C🆈к🇦!')).toBeTruthy()
+        expect(badwords.check(decode('4840d185d183d0b941'))).toBeTruthy()
+        expect(badwords.check(decode('43f09f8688d0baf09f87a621'))).toBeTruthy()
       })
 
       it('checks words with good chars', () => {
@@ -214,7 +253,7 @@ describe('index', () => {
 
     describe('filter()', () => {
       it('filters bad words', () => {
-        expect(badwords.filter('кто ты сY4к@ 6лять а?')).toBe('кто ты *** *** а?')
+        expect(badwords.filter(decode('d0bad182d0be20d182d18b20d1815934d0ba402036d0bbd18fd182d18c20d0b03f'))).toBe('кто ты *** *** а?')
       })
     })
   })
@@ -224,21 +263,21 @@ describe('index', () => {
 
     describe('check()', () => {
       it('checks words', () => {
-        expect(badwords.check('zalupa')).toBeTruthy()
+        expect(badwords.check(decode('7a616c757061'))).toBeTruthy()
       })
 
       it('checks words with lookalike chars', () => {
-        expect(badwords.check('3@luPa')).toBeTruthy()
+        expect(badwords.check(decode('33406c755061'))).toBeTruthy()
       })
 
       it('checks confusables', () => {
-        expect(badwords.check('𝔁🆈u')).toBeTruthy()
+        expect(badwords.check(decode('f09d9481f09f868875'))).toBeTruthy()
       })
     })
 
     describe('filter()', () => {
       it('filters bad words', () => {
-        expect(badwords.filter('etot pidar huy')).toBe('etot *** ***')
+        expect(badwords.filter(decode('65746f7420706964617220687579'))).toBe('etot *** ***')
       })
     })
   })
@@ -248,17 +287,17 @@ describe('index', () => {
 
     describe('check()', () => {
       it('checks words', () => {
-        expect(badwords.check('то є падлюка така мала')).toBeTruthy()
+        expect(badwords.check(decode('d182d0be20d19420d0bfd0b0d0b4d0bbd18ed0bad0b020d182d0b0d0bad0b020d0bcd0b0d0bbd0b0'))).toBeTruthy()
       })
 
       it('checks words with lookalike chars', () => {
-        expect(badwords.check('п🅸3д🇦то')).toBeTruthy()
+        expect(badwords.check(decode('d0bff09f85b833d0b4f09f87a6d182d0be'))).toBeTruthy()
       })
     })
 
     describe('filter()', () => {
       it('filters bad words', () => {
-        expect(badwords.filter('то є дупа йолопа')).toBe('то є *** ***')
+        expect(badwords.filter(decode('d182d0be20d19420d0b4d183d0bfd0b020d0b9d0bed0bbd0bed0bfd0b0'))).toBe('то є *** ***')
       })
     })
   })
@@ -268,13 +307,13 @@ describe('index', () => {
 
     describe('check()', () => {
       it('checks words', () => {
-        expect(badwords.check('Mucho jilipollas')).toBeTruthy()
+        expect(badwords.check(decode('4d7563686f206a696c69706f6c6c6173'))).toBeTruthy()
       })
     })
 
     describe('filter()', () => {
       it('filters bad words', () => {
-        expect(badwords.filter('El Cabrón y La Puta')).toBe('El *** y La ***')
+        expect(badwords.filter(decode('456c2043616272c3b36e2079204c612050757461'))).toBe('El *** y La ***')
       })
     })
   })
@@ -284,13 +323,13 @@ describe('index', () => {
 
     describe('check()', () => {
       it('checks words', () => {
-        expect(badwords.check('幹你娘')).toBeTruthy()
+        expect(badwords.check(decode('e5b9b9e4bda0e5a898'))).toBeTruthy()
       })
     })
 
     describe('filter()', () => {
       it('filters bad words', () => {
-        expect(badwords.filter('幹你娘 妓女')).toBe('*** ***')
+        expect(badwords.filter(decode('e5b9b9e4bda0e5a89820e5a693e5a5b3'))).toBe('*** ***')
       })
     })
   })
@@ -300,13 +339,13 @@ describe('index', () => {
 
     describe('check()', () => {
       it('checks words', () => {
-        expect(badwords.check('connard')).toBeTruthy()
+        expect(badwords.check(decode('636f6e6e617264'))).toBeTruthy()
       })
     })
 
     describe('filter()', () => {
       it('filters bad words', () => {
-        expect(badwords.filter('étron')).toBe('***')
+        expect(badwords.filter(decode('c3a974726f6e'))).toBe('***')
       })
     })
   })
@@ -316,13 +355,13 @@ describe('index', () => {
 
     describe('check()', () => {
       it('checks words', () => {
-        expect(badwords.check('dupa kurwy')).toBeTruthy()
+        expect(badwords.check(decode('64757061206b75727779'))).toBeTruthy()
       })
     })
 
     describe('filter()', () => {
       it('filters bad words', () => {
-        expect(badwords.filter('dupa kurwy')).toBe('*** ***')
+        expect(badwords.filter(decode('64757061206b75727779'))).toBe('*** ***')
       })
     })
   })
@@ -332,13 +371,13 @@ describe('index', () => {
 
     describe('check()', () => {
       it('checks words', () => {
-        expect(badwords.check('die scheiße')).toBeTruthy()
+        expect(badwords.check(decode('646965207363686569c39f65'))).toBeTruthy()
       })
     })
 
     describe('filter()', () => {
       it('filters bad words', () => {
-        expect(badwords.filter('Ich kacke sehr gut')).toBe('Ich *** sehr gut')
+        expect(badwords.filter(decode('496368206b61636b65207365687220677574'))).toBe('Ich *** sehr gut')
       })
     })
   })
