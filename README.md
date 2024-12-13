@@ -26,28 +26,28 @@ npm install bad-words-next
 
 ```js
 const BadWordsNext = require('bad-words-next')
-const en = require('bad-words-next/data/en.json')
+const en = require('bad-words-next/lib/en')
 
 const badwords = new BadWordsNext({ data: en })
 
 // Returns true when passed string contains a bad word
-console.log(badwords.check('S0me sh!tt is here'))
+console.log(badwords.check('S0me sh!++ is here'))
 // will print `true`
 
 // Returns filtered string with masked bad words
-console.log(badwords.filter('S0me sh!tt is here'))
+console.log(badwords.filter('S0me sh!++ is here'))
 // will print `S0me *** is here`
 
 // Returns filtered string and catches bad words
-badwords.filter('S0me sh!tt is here', badword => {
+badwords.filter('S0me sh!++ is here', badword => {
   console.log(badword)
 })
-// will print `sh!tt`
+// will print `sh!++`
 
 // Use exclusions
 const badwords = new BadWordsNext({ data: en, exclusions: ['sh+it+' /*works with lookalikes or the actual words*/] })
-console.log(badwords.filter('S0me sh!tt is here'))
-// will keep the `sh!tt` word
+console.log(badwords.filter('S0me sh!++ is here'))
+// will keep the `sh!++` word
 ```
 
 ## Add more dictionaries
@@ -55,15 +55,15 @@ console.log(badwords.filter('S0me sh!tt is here'))
 ```js
 const BadWordsNext = require('bad-words-next')
 
-const en = require('bad-words-next/data/en.json')
-const es = require('bad-words-next/data/es.json')
-const fr = require('bad-words-next/data/fr.json')
-const de = require('bad-words-next/data/de.json')
-const ru = require('bad-words-next/data/ru.json')
-const rl = require('bad-words-next/data/ru_lat.json')
-const ua = require('bad-words-next/data/ua.json')
-const pl = require('bad-words-next/data/pl.json')
-const ch = require('bad-words-next/data/ch.json')
+const en = require('bad-words-next/lib/en')
+const es = require('bad-words-next/lib/es')
+const fr = require('bad-words-next/lib/fr')
+const de = require('bad-words-next/lib/de')
+const ru = require('bad-words-next/lib/ru')
+const rl = require('bad-words-next/lib/ru_lat')
+const ua = require('bad-words-next/lib/ua')
+const pl = require('bad-words-next/lib/pl')
+const ch = require('bad-words-next/lib/ch')
 
 const badwords = new BadWordsNext()
 badwords.add(en)
