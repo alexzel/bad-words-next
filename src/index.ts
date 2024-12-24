@@ -410,7 +410,7 @@ class BadWordsNext {
           }
           if (repeat) {
             return this.opts.placeholder.repeat(
-              // FIX: This should work with multi-byte utf8 chars
+              // FIXME: This should work with multi-byte utf8 chars
               // See: skipped test for multi-byte utf8 chars
               //
               // There is a suggestion to use regexp and split
