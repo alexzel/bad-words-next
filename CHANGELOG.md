@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/alexzel/bad-words-next/compare/v3.0.0...v3.1.0) (2024-12-24)
+
+
+### Features
+
+* update dictionaries ([3dd1e3a](https://github.com/alexzel/bad-words-next/commit/3dd1e3a46573a07e8e92b82734050c7af38c0b81))
+
 ## [3.0.0](https://github.com/alexzel/bad-words-next/compare/v2.3.2...v3.0.0) (2024-12-13)
 
 
