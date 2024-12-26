@@ -248,7 +248,7 @@ class BadWordsNext {
     let lookalike = ''
 
     for (const word of data.words) {
-      let exp = escapeRegexpWord(word)
+      let exp = escapeRegexpWord(word.trim().replace(/\s/g, '_'))
       if (exp === '') continue
 
       if (exp.startsWith('*')) {

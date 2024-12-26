@@ -129,7 +129,7 @@ describe('index', () => {
         expect(badwords2.filter(input)).toBe(input)
       })
 
-      it('only preCheck called if there are no bad words', () => {
+      it('calls only preCheck when there are no bad words', () => {
         const badwords = new BadWordsNext({ data: en })
 
         const spyCheck = jest.spyOn(badwords, 'check')
@@ -139,6 +139,17 @@ describe('index', () => {
 
         expect(spyPreCheck).toBeCalledTimes(1)
         expect(spyCheck).toBeCalledTimes(0)
+      })
+
+      it('trims dictionary words and replaces spaces with pseudo space chars', () => {
+        const badwords = new BadWordsNext({
+          data: { id: 'test', words: ['  t est*   '], lookalike: {} }
+        })
+        expect(badwords.check('test')).toBeTruthy()
+        expect(badwords.check('t.est')).toBeTruthy()
+        expect(badwords.check('t-esting')).toBeTruthy()
+        expect(badwords.check('123t-esting')).toBeTruthy() // with a special chars at the beginning of a word
+        expect(badwords.check('zt-esting')).toBeFalsy()
       })
     })
   })
