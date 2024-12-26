@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.1](https://github.com/alexzel/bad-words-next/compare/v3.1.0...v3.1.1) (2024-12-26)
+
+
+### Bug Fixes
+
+* improve regexp into internal string convertion ([04b3b16](https://github.com/alexzel/bad-words-next/commit/04b3b1660281eed4e919420759fc5ba00e29fa67))
+* trim dictionary words and replace spaces with pseudo space chars ([ef7d437](https://github.com/alexzel/bad-words-next/commit/ef7d437234794445155ba0aa80725882a1aa245b))
+
 ## [3.1.0](https://github.com/alexzel/bad-words-next/compare/v3.0.0...v3.1.0) (2024-12-24)
 
 
