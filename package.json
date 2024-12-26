@@ -10,11 +10,8 @@
     "filter",
     "checker",
     "badwords",
-    "clean",
     "detect",
-    "sanitize",
-    "utility",
-    "typescript"
+    "sanitize"
   ],
   "repository": "https://github.com/alexzel/bad-words-next",
   "homepage": "https://github.com/alexzel/bad-words-next/wiki",
