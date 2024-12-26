@@ -15,6 +15,26 @@ function escapeRegexpString (str: string): string {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
+function regexpToString (re: RegExp): string {
+  const str = re.toString()
+  let i = 0
+  let j = str.length - 1
+  for (;;) {
+    const left = str[i] === '/'
+    const right = str[j] === '/'
+    if (i >= j || (left && right)) {
+      break
+    }
+    i += Number(!left)
+    j -= Number(!right)
+  }
+  i++
+  j--
+  if (str[i] === '^') i++
+  if (str[j] === '$' && str[j - 1] !== '\\') j--
+  return str.slice(i, j + 1)
+}
+
 /**
  * Simple key-value object for homoglyphs conversion
  */
@@ -211,7 +231,7 @@ class BadWordsNext {
       ? { ...DEFAULT_OPTIONS, ...opts }
       : DEFAULT_OPTIONS
 
-    this.specialChars = this.opts.specialChars.toString().slice(1, -1)
+    this.specialChars = regexpToString(this.opts.specialChars)
     this.exclusionsRegexps = this.opts.exclusions.map<RegExp>(this.regexp.bind(this))
     this.data = {}
     this.ids = []

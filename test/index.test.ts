@@ -151,6 +151,14 @@ describe('index', () => {
         expect(badwords.check('123t-esting')).toBeTruthy() // with a special chars at the beginning of a word
         expect(badwords.check('zt-esting')).toBeFalsy()
       })
+
+      it('converts special chars regexp into internal string', () => {
+        const badwords1 = new BadWordsNext({ specialChars: /^\d|(?:extra)|\$$/igm })
+        expect(badwords1.specialChars).toBe('\\d|(?:extra)|\\$')
+
+        const badwords2 = new BadWordsNext({ specialChars: /a/ })
+        expect(badwords2.specialChars).toBe('a')
+      })
     })
   })
 
